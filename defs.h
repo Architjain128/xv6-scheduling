@@ -4,11 +4,14 @@ struct file;
 struct inode;
 struct pipe;
 struct proc;
+struct process_stat;
 struct rtcdate;
 struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+struct proc_stat;
+int check_flag[5];
 
 // bio.c
 void            binit(void);
@@ -120,6 +123,13 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+int             getpinfo(struct process_stat *, int);
+int             set_priority(int, int);
+int             waitx(int *, int *);
+void            sysps(void);
+void            change_check_flag(struct proc* p);
+void            incr_curr_ticks(struct proc *p);
+
 
 // swtch.S
 void            swtch(struct context**, struct context*);
