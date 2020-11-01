@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv) {
 
-    if (argc <= 1) {
+    if (argc != 2) {
         printf(2, "ERROR : time : Invalid input, input must be in form of [time <process>]\n");
         exit();
     }
@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
         {
             int wtime, rtime;
             int wid = waitx(&wtime, &rtime);
-            printf(1, "Time report for [%s] with Process ID : [%d]\nWaiting time: [%d]\tRunning time: [%d]\n\n", argv[1], wid, wtime, rtime);
+            printf(1, "Time report for [%s] with Process ID : %d || Stauts : [%d] ||\nWaiting time: [%d]\tRunning time: [%d]\tSleeping time: [%d]\n\n", argv[1],pid,wid, rtime, wtime);
             exit();
         }
     }

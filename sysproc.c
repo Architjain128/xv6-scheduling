@@ -6,7 +6,6 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
-#include "pstat.h"
 
 int
 sys_fork(void)
@@ -104,10 +103,9 @@ int sys_waitx(void)
   return waitx(wtime, rtime);
 }
 
-int
-sys_ps (void)
+int sys_getps(void)
 {
-  return 0;
+  return getps();
 }
 
 int sys_set_priority(void)
@@ -120,22 +118,6 @@ int sys_set_priority(void)
   if (argint(1, &priority) < 0)
     return -1;
   
-  // return set_priority(pid, priority);
-  return 0;
-}
+  return set_priority(priority,pid);
 
-int sys_getpinfo(void)
-{
-  int pid; 
-  struct proc_stat *p;
-
-  if(argptr(0,(char**)&p,sizeof(p)) < 0)
-    return -1;
-
-  if(argint(1, &pid) < 0)
-    return -1;
-  return 0;
-
-
-  // return getpinfo(p, pid);
 }

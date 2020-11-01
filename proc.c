@@ -6,21 +6,88 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
-#include "pstat.h"
-
 
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];
 } ptable;
 
+struct proc *queue[5][NPROC];
+int q_tail[5] = {-1, -1, -1, -1, -1}, q_ticks_max[5] = {1, 2, 4, 8, 16}, q_ticks[5] = {0,0,0,0,0};
+
 static struct proc *initproc;
 
 int nextpid = 1;
 extern void forkret(void);
 extern void trapret(void);
-
 static void wakeup1(void *chan);
+
+void ticking(){
+	for(struct proc *p=ptable.proc; p<&ptable.proc[NPROC]; ++p){
+		if(p->state == RUNNING){
+			p->rtime++;
+		}
+    if(p->state == SLEEPING){
+			p->iotime++;
+		}
+	}
+}
+
+int add_proc_to_q(struct proc *p, int q_no)
+{	
+  // checking queue
+	for(int i=0; i < q_tail[q_no]; i++)
+	{
+		if(p->pid == queue[q_no][i]->pid)
+			return -1;
+	}
+	// cprintf("Process with PID %d added to Queue %d\n", p->pid, q_no);
+	p->enter = ticks;
+	p -> queue = q_no;
+	q_tail[q_no]++;
+	queue[q_no][q_tail[q_no]] = p;
+	return 1;
+}
+
+int remove_proc_from_q(struct proc *p, int q_no)
+{
+	int proc_found = 0, rem = 0;
+	for(int i=0; i <= q_tail[q_no]; i++)
+	{
+		if(queue[q_no][i] -> pid == p->pid)
+		{
+			// cprintf("Process with PID %d found in Queue %d\n", p->pid, q_no);
+			rem = i;
+			proc_found = 1;
+			break;
+		}
+	}
+	if(proc_found  == 0)
+	{
+		// cprintf("ERROR : REMOVE_Q : no Process with pid %d found in Queue %d\n", p->pid, q_no);
+		return -1;
+	}
+	for(int i = rem; i < q_tail[q_no]; i++)
+	queue[q_no][i] = queue[q_no][i+1]; 
+	q_tail[q_no] -= 1;
+	// cprintf("Process with PID %d is removed from Queue %d\n", p->pid, q_no);
+	return 1;
+}
+
+void change_q_flag(struct proc* p)
+{
+	acquire(&ptable.lock);
+	p-> change_q = 1;
+	release(&ptable.lock);
+}
+
+void incr_curr_ticks(struct proc *p)
+{
+	acquire(&ptable.lock);
+	p->curr_ticks++;
+	p->qticks[p->queue]++;
+	release(&ptable.lock);
+}
 
 void
 pinit(void)
@@ -117,7 +184,16 @@ found:
 	p->etime = 0;
 	p->rtime = 0;
 	p->iotime = 0;
-
+	p->waitshh = -1282128;
+  p->num_run = 0;
+	p->priority = 60; // default
+  	#ifdef MLFQ
+		p->curr_ticks = 0;
+		p->queue = 0;
+		p->enter = 0;
+		for(int i=0; i<5; i++)
+			p->qticks[i] = 0;
+	#endif
   return p;
 }
 
@@ -155,6 +231,9 @@ userinit(void)
   acquire(&ptable.lock);
 
   p->state = RUNNABLE;
+  #ifdef MLFQ
+  add_proc_to_q(p,0);
+  #endif
   release(&ptable.lock);
 }
 
@@ -220,6 +299,9 @@ fork(void)
   acquire(&ptable.lock);
 
   np->state = RUNNABLE;
+  #ifdef MLFQ
+  		add_proc_to_q(np, 0);
+	#endif
   release(&ptable.lock);
 
   return pid;
@@ -268,7 +350,8 @@ exit(void)
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
   curproc->etime = ticks;
-	cprintf("\nTotal Time : [%d]\n", curproc->etime - curproc->ctime);
+  curproc->waitshh=curproc->etime - curproc->ctime;
+	cprintf("-> EXIT MSG : Total Time for process [%s] with pid [%d] is [%d]\n",curproc->name,curproc->pid, curproc->etime - curproc->ctime);
   sched();
   panic("zombie exit");
 }
@@ -296,6 +379,10 @@ wait(void)
         kfree(p->kstack);
         p->kstack = 0;
         freevm(p->pgdir);
+        #ifdef MLFQ
+					remove_proc_from_q(p, p->queue);
+          p->queue=-1;
+				#endif 
         p->pid = 0;
         p->parent = 0;
         p->name[0] = 0;
@@ -335,16 +422,21 @@ waitx(int *wtime, int *rtime)
       havekids = 1;
       if(p->state == ZOMBIE){
         // Found one.
-        *rtime = p->rtime;
-				*wtime = p->etime - p->ctime - p->rtime;
+        *rtime = p->rtime ;
+				*wtime = p->etime - p->ctime - p->rtime - p->iotime;
         pid = p->pid;
         kfree(p->kstack);
         p->kstack = 0;
         freevm(p->pgdir);
+        #ifdef MLFQ
+					remove_proc_from_q(p, p->queue);
+          p->queue=-1;
+				#endif 
         p->pid = 0;
         p->parent = 0;
         p->name[0] = 0;
         p->killed = 0;
+        // p->etime = ticks;
         p->state = UNUSED;
         release(&ptable.lock);
         return pid;
@@ -373,7 +465,6 @@ waitx(int *wtime, int *rtime)
 void
 scheduler(void)
 {
-  struct proc *p;
   struct cpu *c = mycpu();
   c->proc = 0;
   
@@ -383,26 +474,190 @@ scheduler(void)
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
+    #ifdef RR
+      struct proc *p;
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
 
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
-      c->proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
+        // Switch to chosen process.  It is the process's job
+        // to release ptable.lock and then reacquire it
+        // before jumping back to us.
+        c->proc = p;
+        switchuvm(p);
+        p->num_run++;
+        p->state = RUNNING;
 
-      swtch(&(c->scheduler), p->context);
-      switchkvm();
+        swtch(&(c->scheduler), p->context);
+        switchkvm();
 
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
-      c->proc = 0;
-    }
+        // Process is done running for now.
+        // It should have changed its p->state before coming back.
+        c->proc = 0;
+      }
+    #else
+    #ifdef FCFS
+
+    struct proc *p;
+    struct proc *to_run_proc = 0;
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+		{
+			if (p->state != RUNNABLE)
+				continue;
+
+			if (to_run_proc == 0)
+				to_run_proc = p;
+			else if (p->ctime < to_run_proc->ctime)
+				to_run_proc = p;
+		}
+    if (to_run_proc != 0 && to_run_proc->state == RUNNABLE)
+		{
+			// cprintf("Process %s with PID %d and start time %d running\n",to_run_proc->name, to_run_proc->pid, to_run_proc->ctime);
+			p = to_run_proc;
+			c->proc = p;
+			switchuvm(p);
+			p->num_run++;
+			p->state = RUNNING;
+
+			swtch(&(c->scheduler), p->context);
+			switchkvm();
+
+			// Process is done running for now.
+			// It should have changed its p->state before coming back.
+			c->proc = 0;
+		}
+    #else
+		#ifdef PBS
+
+      struct proc *p;
+			struct proc *to_run_proc = 0;
+			
+			for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+			{
+				if (p->state != RUNNABLE)
+					continue;	
+
+				if (to_run_proc == 0)
+					to_run_proc = p;
+				
+				else if (p-> priority <= to_run_proc-> priority)
+        {
+          if(p-> priority == to_run_proc-> priority && p->ctime < to_run_proc->ctime)
+          {
+            to_run_proc = p;
+          }
+          else
+          {
+            to_run_proc = p;
+          }
+        }
+			}
+
+			if(to_run_proc == 0)
+			{
+				release(&ptable.lock);
+				continue;		
+			}
+
+			for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+			{
+				struct proc *q; int flag =0;
+				for(q = ptable.proc; q < &ptable.proc[NPROC]; q++)
+				{
+					if (q->state != RUNNABLE)
+						continue;
+					
+					if(q->priority < to_run_proc->priority)
+						flag = 1;
+          // if(p-> priority == to_run_proc-> priority && p->ctime < to_run_proc->ctime)
+						// flag = 1;
+
+				}
+
+				if(flag == 1) break;
+				
+				if (p->state != RUNNABLE) continue;
+
+				else if (p->priority == to_run_proc->priority)
+				{
+					// cprintf("Process %s with PID %d and priority %d running\n",p->name, p->pid, p->priority);
+					c->proc = p;
+					switchuvm(p);
+					p->num_run++;
+					p->state = RUNNING;
+
+					swtch(&(c->scheduler), p->context);
+					switchkvm();
+					//if (p->state == RUNNABLE) break;
+
+					// Process is done running for now.
+					// It should have changed its p->state before coming back.
+					// cprintf("PID %d done !!!\n\n", to_run_proc->pid);
+					c->proc = 0;
+				}
+			}
+    #else
+		#ifdef MLFQ
+
+      for(int i=1; i < 5; i++)
+			{
+				for(int j=0; j <= q_tail[i]; j++)
+				{
+					struct proc *p = queue[i][j];
+          int age = ticks - p->enter;
+					if(age > 30)
+					{
+						remove_proc_from_q(p, i);
+						// cprintf("Process %d moved to queue %d from %d due to age %d at %d\n", p->pid, i-1,i, age, ticks);
+						add_proc_to_q(p, i-1);
+					}
+				}
+			}
+
+			struct proc *p = 0;
+			for(int i=0; i < 5; i++)
+			{
+				if(q_tail[i] >=0)
+				{
+					p = queue[i][0];
+					remove_proc_from_q(p, i);
+					break;
+				}
+			}
+
+			if(p!=0 && p->state==RUNNABLE)
+			{
+				p->curr_ticks++;
+				p->num_run++;
+				// cprintf("Scheduling %s with PID %d from Queue %d with current tick %d\n",p->name, p->pid, p->queue, p->curr_ticks);
+				p->qticks[p->queue]++;
+				c->proc = p;
+				switchuvm(p);
+				p->state = RUNNING;
+				swtch(&c->scheduler, p->context);
+				switchkvm();
+				c->proc = 0;
+
+				if(p!=0 && p->state == RUNNABLE)
+				{
+					if(p->change_q == 1)
+					{
+						p->change_q = 0;
+						p->curr_ticks = 0;
+						if(p->queue != 4){
+					  // remove_proc_from_q(p, p->queue);
+						p->queue+=1;
+            }
+					}
+					else p->curr_ticks = 0;
+					  add_proc_to_q(p, p->queue);
+				}
+			}
+    #endif
+    #endif
+    #endif
+    #endif
     release(&ptable.lock);
-
   }
 }
 
@@ -510,9 +765,15 @@ wakeup1(void *chan)
 {
   struct proc *p;
 
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-    if(p->state == SLEEPING && p->chan == chan)
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->state == SLEEPING && p->chan == chan){
       p->state = RUNNABLE;
+      #ifdef MLFQ
+				p->curr_ticks = 0;
+				add_proc_to_q(p, p->queue);
+			#endif
+    }
+  }
 }
 
 // Wake up all processes sleeping on chan.
@@ -537,8 +798,13 @@ kill(int pid)
     if(p->pid == pid){
       p->killed = 1;
       // Wake process from sleep if necessary.
-      if(p->state == SLEEPING)
+      if(p->state == SLEEPING){
         p->state = RUNNABLE;
+        #ifdef MLFQ
+          p->curr_ticks = 0;
+          add_proc_to_q(p, p->queue);
+        #endif
+      }
       release(&ptable.lock);
       return 0;
     }
@@ -584,8 +850,85 @@ procdump(void)
   }
 }
 
-void
-sysps (void)
-{
 
+int
+getps(void) 
+{
+	struct proc *p;
+	int ret = -1;
+  acquire(&ptable.lock);
+  #ifndef MLFQ
+  cprintf("PID\tPriority    State \tr_time\tw_time\ts_time\tName\n");
+  #endif
+  #ifdef MLFQ
+  cprintf("PID\tPriority    State \tr_time\tw_time\ts_time\tn_run\tcur_q\t q0\tq1\tq2\tq3\tq4\tName\n");
+  #endif
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; ++p)
+  {
+    #ifndef MLFQ
+    if (p->state == SLEEPING)
+    {
+      cprintf("%d \t %d \t   SLEEPING \t %d \t %d \t %d\t %s\n",  p->pid, p->priority, p->rtime, ticks - p->ctime - p->rtime -p->iotime,p->iotime,p->name);
+    }
+    else if (p->state == RUNNING)
+    {
+      cprintf("%d \t %d \t   RUNNING  \t %d \t %d \t %d\t %s\n",  p->pid, p->priority, p->rtime, ticks - p->ctime - p->rtime -p->iotime,p->iotime,p->name);
+    }
+    else if (p->state == RUNNABLE)
+    {
+      cprintf("%d \t %d \t   RUNNABLE \t %d \t %d \t %d\t %s\n",  p->pid, p->priority, p->rtime, ticks - p->ctime - p->rtime -p->iotime,p->iotime,p->name);
+    }
+    else if (p->state == ZOMBIE)
+    {
+      cprintf("%d \t %d \t    ZOMBIE \t %d \t %d \t %d\t %s\n",  p->pid, p->priority, p->rtime, p->etime - p->ctime - p->rtime -p->iotime,p->iotime,p->name);
+    }
+    #endif
+
+    #ifdef MLFQ
+   if (p->state == SLEEPING)
+    {
+      cprintf("%d \t %d \t   SLEEPING \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d\t %s\n",  p->pid, p->priority, p->rtime, ticks - p->ctime - p->rtime -p->iotime,p->iotime,p->num_run,p->queue,p->qticks[0],p->qticks[1],p->qticks[2],p->qticks[3],p->qticks[4],p->name);
+    }
+    else if (p->state == RUNNING)
+    {
+      cprintf("%d \t %d \t   RUNNING  \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d\t %s\n",  p->pid, p->priority, p->rtime, ticks - p->ctime - p->rtime -p->iotime,p->iotime,p->num_run,p->queue,p->qticks[0],p->qticks[1],p->qticks[2],p->qticks[3],p->qticks[4],p->name);
+    }
+    else if (p->state == RUNNABLE)
+    {
+      cprintf("%d \t %d \t   RUNNABLE \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d\t %s\n",  p->pid, p->priority, p->rtime, ticks - p->ctime - p->rtime -p->iotime,p->iotime,p->num_run,p->queue,p->qticks[0],p->qticks[1],p->qticks[2],p->qticks[3],p->qticks[4],p->name);
+    }
+    else if (p->state == ZOMBIE)
+    {
+      cprintf("%d \t %d \t    ZOMBIE \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d \t %d\t %s\n",  p->pid, p->priority, p->rtime, p->etime - p->ctime - p->rtime -p->iotime,p->iotime,p->num_run,-1,p->qticks[0],p->qticks[1],p->qticks[2],p->qticks[3],p->qticks[4],p->name);
+    }
+    #endif
+
+  }
+  release(&ptable.lock);
+	return ret;
+}
+
+int set_priority(int priority, int pid)
+{
+	struct proc *p;
+	int to_yield = 0, old_priority = 0;
+
+	for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+	{
+		if(p->pid == pid)
+		{
+			to_yield = 0;
+			acquire(&ptable.lock);
+			old_priority = p->priority;
+  		p->priority = priority;
+			cprintf("Changed priority of process with PID %d from %d to %d\n", p->pid, old_priority, p->priority);
+			if (old_priority > p->priority)
+				to_yield = 1;
+			release(&ptable.lock);
+			break;
+		}
+	}
+  	if (to_yield == 1)
+    yield();
+  	return old_priority;
 }
