@@ -396,47 +396,6 @@ waitx(int *wtime, int *rtime)
     }
     ```
 
-# Comparision
-
-+ for `time tester` (waitx) command wtime and rtime includes only running and waiting time for `time` process not for fork running in it thats why i printed there individual finishing time (total time)  
-
-    * RR <br/>
-    <img src=./RRt.png><br/>
-    * FCFS <br/>
-    <img src=./FCFSt.png><br/>
-    * PBS <br/>
-    <img src=./PBSt.png><br/>
-    * MLFQ <br/>
-    <img src=./MLFQt.png><br/>
-
-    * total time for execution in given scheduling
-        |flag|total_ticks|
-        |-|:-:|
-        |RR|2455|
-        |FCFS|4226|
-        |PBS|2444|
-        |MLFQ|2410|
-        
-+ although wtime, rtime and total_time for `time tester` in each scheduling are mentioned below
-    | flag| wtime | rtime | s_time |total_time|
-    |-----|:---:|:--:|:--:|:-:|
-    | RR | 3 | 17|24355|2455|
-    | FCFS | 5 | 1|4220|4226|
-    | PBS | 6 | 15|2422|2444|
-    | MLFQ | 5 | 1|2404|2410|
-    *total time = waiting_time + running_time + sleeping_time*
-
-# Question
-+ As asked in point 5 of procedure, the other extreme for MLFQ is a process can ensure shorter CPU bursts by increasing the number of i/o processes (for example printing garbage on the terminal). Thus it will stay in the higher priority queues.
-
-
-# BONUS
-not this time ☹
-+ reason: getting this as ouput when printing logs for queue swaping, which is must to collect data to create graph 
-    ```
-    lapicid 0: panic: acquire
-    80104f31 801007c2 80103a05 80103a9f 8010472f 80100a25 80102794 8010648f 80106264 8010301f
-    ```
 
 # Summary
 + files changed
@@ -455,13 +414,17 @@ not this time ☹
     + tester_ps.c
     + tester_pbs.c
     + tester_mlfq.c
+    + setPriority.c
 + README.md
     + code description
++ REPORT.md
     + question asked
+    + graph
 + Others 
-    + gr.txt 
+    + graph_log_unfilter.txt 
+    + graph_log.txt
+    + graph.png 
     + RRt.png
     + FCFSt.png
     + PBSt.png
     + MLFQt.png
-

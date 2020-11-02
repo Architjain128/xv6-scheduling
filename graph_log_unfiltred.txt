@@ -1,0 +1,2363 @@
+gcc -Werror -Wall -o mkfs mkfs.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o ulib.o ulib.c
+gcc -m32 -gdwarf-2 -Wa,-divide   -c -o usys.o usys.S
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o printf.o printf.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o umalloc.o umalloc.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o cat.o cat.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _cat cat.o ulib.o usys.o printf.o umalloc.o
+objdump -S _cat > cat.asm
+objdump -t _cat | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > cat.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o echo.o echo.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _echo echo.o ulib.o usys.o printf.o umalloc.o
+objdump -S _echo > echo.asm
+objdump -t _echo | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > echo.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o forktest.o forktest.c
+# forktest has less library code linked in - needs to be small
+# in order to be able to max out the proc table.
+ld -m    elf_i386 -N -e main -Ttext 0 -o _forktest forktest.o ulib.o usys.o
+objdump -S _forktest > forktest.asm
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o grep.o grep.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _grep grep.o ulib.o usys.o printf.o umalloc.o
+objdump -S _grep > grep.asm
+objdump -t _grep | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > grep.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o init.o init.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _init init.o ulib.o usys.o printf.o umalloc.o
+objdump -S _init > init.asm
+objdump -t _init | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > init.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o kill.o kill.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _kill kill.o ulib.o usys.o printf.o umalloc.o
+objdump -S _kill > kill.asm
+objdump -t _kill | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kill.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o ln.o ln.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _ln ln.o ulib.o usys.o printf.o umalloc.o
+objdump -S _ln > ln.asm
+objdump -t _ln | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > ln.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o ls.o ls.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _ls ls.o ulib.o usys.o printf.o umalloc.o
+objdump -S _ls > ls.asm
+objdump -t _ls | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > ls.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o mkdir.o mkdir.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _mkdir mkdir.o ulib.o usys.o printf.o umalloc.o
+objdump -S _mkdir > mkdir.asm
+objdump -t _mkdir | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > mkdir.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o rm.o rm.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _rm rm.o ulib.o usys.o printf.o umalloc.o
+objdump -S _rm > rm.asm
+objdump -t _rm | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > rm.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o sh.o sh.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _sh sh.o ulib.o usys.o printf.o umalloc.o
+objdump -S _sh > sh.asm
+objdump -t _sh | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > sh.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o stressfs.o stressfs.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _stressfs stressfs.o ulib.o usys.o printf.o umalloc.o
+objdump -S _stressfs > stressfs.asm
+objdump -t _stressfs | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > stressfs.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o usertests.o usertests.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _usertests usertests.o ulib.o usys.o printf.o umalloc.o
+objdump -S _usertests > usertests.asm
+objdump -t _usertests | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > usertests.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o wc.o wc.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _wc wc.o ulib.o usys.o printf.o umalloc.o
+objdump -S _wc > wc.asm
+objdump -t _wc | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > wc.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o zombie.o zombie.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _zombie zombie.o ulib.o usys.o printf.o umalloc.o
+objdump -S _zombie > zombie.asm
+objdump -t _zombie | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > zombie.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o time.o time.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _time time.o ulib.o usys.o printf.o umalloc.o
+objdump -S _time > time.asm
+objdump -t _time | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > time.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o ps.o ps.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _ps ps.o ulib.o usys.o printf.o umalloc.o
+objdump -S _ps > ps.asm
+objdump -t _ps | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > ps.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o setPriority.o setPriority.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _setPriority setPriority.o ulib.o usys.o printf.o umalloc.o
+objdump -S _setPriority > setPriority.asm
+objdump -t _setPriority | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > setPriority.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o tester.o tester.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _tester tester.o ulib.o usys.o printf.o umalloc.o
+objdump -S _tester > tester.asm
+objdump -t _tester | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > tester.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o tester_pbs.o tester_pbs.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _tester_pbs tester_pbs.o ulib.o usys.o printf.o umalloc.o
+objdump -S _tester_pbs > tester_pbs.asm
+objdump -t _tester_pbs | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > tester_pbs.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o tester_mlfq.o tester_mlfq.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _tester_mlfq tester_mlfq.o ulib.o usys.o printf.o umalloc.o
+objdump -S _tester_mlfq > tester_mlfq.asm
+objdump -t _tester_mlfq | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > tester_mlfq.sym
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o tester_ps.o tester_ps.c
+ld -m    elf_i386 -N -e main -Ttext 0 -o _tester_ps tester_ps.o ulib.o usys.o printf.o umalloc.o
+objdump -S _tester_ps > tester_ps.asm
+objdump -t _tester_ps | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > tester_ps.sym
+./mkfs fs.img README _cat _echo _forktest _grep _init _kill _ln _ls _mkdir _rm _sh _stressfs _usertests _wc _zombie _time _ps _setPriority _tester _tester_pbs _tester_mlfq _tester_ps 
+nmeta 59 (boot, super, log blocks 30 inode blocks 26, bitmap blocks 1) blocks 941 total 1000
+balloc: first 894 blocks have been allocated
+balloc: write bitmap block at sector 58
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie -fno-pic -O -nostdinc -I. -c bootmain.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie -fno-pic -nostdinc -I. -c bootasm.S
+ld -m    elf_i386 -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
+objdump -S bootblock.o > bootblock.asm
+objcopy -S -O binary -j .text bootblock.o bootblock
+./sign.pl bootblock
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o bio.o bio.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o console.o console.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o exec.o exec.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o file.o file.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o fs.o fs.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o ide.o ide.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o ioapic.o ioapic.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o kalloc.o kalloc.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o kbd.o kbd.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o lapic.o lapic.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o log.o log.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o main.o main.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o mp.o mp.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o picirq.o picirq.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o pipe.o pipe.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o proc.o proc.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o sleeplock.o sleeplock.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o spinlock.o spinlock.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o string.o string.c
+gcc -m32 -gdwarf-2 -Wa,-divide   -c -o swtch.o swtch.S
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o syscall.o syscall.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o sysfile.o sysfile.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o sysproc.o sysproc.c
+gcc -m32 -gdwarf-2 -Wa,-divide   -c -o trapasm.o trapasm.S
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o trap.o trap.c
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o uart.o uart.c
+./vectors.pl > vectors.S
+gcc -m32 -gdwarf-2 -Wa,-divide   -c -o vectors.o vectors.S
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie   -c -o vm.o vm.c
+gcc -m32 -gdwarf-2 -Wa,-divide   -c -o entry.o entry.S
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie -fno-pic -nostdinc -I. -c entryother.S
+ld -m    elf_i386 -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
+objcopy -S -O binary -j .text bootblockother.o entryother
+objdump -S bootblockother.o > entryother.asm
+gcc -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer  -D MLFQ -fno-stack-protector -fno-pie -no-pie -nostdinc -I. -c initcode.S
+ld -m    elf_i386 -N -e start -Ttext 0 -o initcode.out initcode.o
+objcopy -S -O binary initcode.out initcode
+objdump -S initcode.o > initcode.asm
+ld -m    elf_i386 -T kernel.ld -o kernel entry.o bio.o console.o exec.o file.o fs.o ide.o ioapic.o kalloc.o kbd.o lapic.o log.o main.o mp.o picirq.o pipe.o proc.o sleeplock.o spinlock.o string.o swtch.o syscall.o sysfile.o sysproc.o trapasm.o trap.o uart.o vectors.o vm.o  -b binary initcode entryother
+objdump -S kernel > kernel.asm
+objdump -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel.sym
+dd if=/dev/zero of=xv6.img count=10000
+dd if=bootblock of=xv6.img conv=notrunc
+dd if=kernel of=xv6.img seek=1 conv=notrunc
+qemu-system-x86_64 -serial mon:stdio -drive file=fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp 1 -m 512 
+xv6...
+cpu0: starting 0
+sb: size 1000 nblocks 941 ninodes 200 nlog 30 logstart 2 inodestart 32 bmap start 58
+init: starting sh
+$ tester_mlfq
+Process with PID 3 added to Queue 0 at 690
+Process with PID 3 is removed from Queue 0 at 690
+Scheduling sh with PID 3 from Queue 0 with current tick 1 at tick 690
+Process with PID 3 added to Queue 1 at 691
+Process with PID 3 is removed from Queue 1 at 691
+Scheduling sh with PID 3 from Queue 1 with current tick 1 at tick 691
+Process with PID 3 added to Queue 1 at 691
+Process with PID 3 is removed from Queue 1 at 691
+Scheduling sh with PID 3 from Queue 1 with current tick 1 at tick 691
+Process with PID 3 added to Queue 1 at 691
+Process with PID 3 is removed from Queue 1 at 691
+Scheduling sh with PID 3 from Queue 1 with current tick 1 at tick 691
+Process with PID 3 added to Queue 1 at 691
+Process with PID 3 is removed from Queue 1 at 691
+Scheduling sh with PID 3 from Queue 1 with current tick 1 at tick 691
+Process with PID 3 added to Queue 1 at 692
+Process with PID 3 is removed from Queue 1 at 692
+Scheduling sh with PID 3 from Queue 1 with current tick 1 at tick 692
+Process with PID 3 added to Queue 1 at 692
+Process with PID 3 is removed from Queue 1 at 692
+Scheduling sh with PID 3 from Queue 1 with current tick 1 at tick 692
+Process with PID 3 added to Queue 1 at 692
+Process with PID 3 is removed from Queue 1 at 692
+Scheduling sh with PID 3 from Queue 1 with current tick 1 at tick 692
+Process with PID 4 added to Queue 0 at 693
+Process with PID 5 added to Queue 0 at 693
+Process with PID 6 added to Queue 0 at 693
+Process with PID 3 added to Queue 2 at 694
+Process with PID 4 is removed from Queue 0 at 694
+Scheduling tester_mlfq with PID 4 from Queue 0 with current tick 1 at tick 694
+Process with PID 5 is removed from Queue 0 at 694
+Scheduling tester_mlfq with PID 5 from Queue 0 with current tick 1 at tick 694
+Process with PID 6 is removed from Queue 0 at 694
+Scheduling tester_mlfq with PID 6 from Queue 0 with current tick 1 at tick 694
+Process with PID 3 is removed from Queue 2 at 694
+Scheduling tester_mlfq with PID 3 from Queue 2 with current tick 1 at tick 694
+Process with PID 7 added to Queue 0 at 694
+Process with PID 4 added to Queue 0 at 695
+Process with PID 5 added to Queue 0 at 695
+Process with PID 6 added to Queue 0 at 695
+Process with PID 8 added to Queue 0 at 695
+Process with PID 7 is removed from Queue 0 at 695
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 695
+Process with PID 4 is removed from Queue 0 at 695
+Scheduling tester_mlfq with PID 4 from Queue 0 with current tick 1 at tick 695
+Process with PID 5 is removed from Queue 0 at 695
+Scheduling tester_mlfq with PID 5 from Queue 0 with current tick 1 at tick 695
+Process with PID 4 added to Queue 0 at 696
+Process with PID 7 added to Queue 0 at 696
+Process with PID 5 added to Queue 1 at 696
+Process with PID 6 is removed from Queue 0 at 696
+Scheduling tester_mlfq with PID 6 from Queue 0 with current tick 1 at tick 696
+Process with PID 8 is removed from Queue 0 at 696
+Scheduling tester_mlfq with PID 8 from Queue 0 with current tick 1 at tick 696
+Process with PID 4 is removed from Queue 0 at 696
+Scheduling tester_mlfq with PID 4 from Queue 0 with current tick 1 at tick 696
+Process with PID 7 is removed from Queue 0 at 696
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 696
+Process with PID 5 is removed from Queue 1 at 696
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 696
+Process with PID 4 added to Queue 0 at 697
+Process with PID 5 added to Queue 1 at 697
+Process with PID 6 added to Queue 0 at 697
+Process with PID 7 added to Queue 0 at 697
+Process with PID 8 added to Queue 0 at 697
+Process with PID 4 is removed from Queue 0 at 697
+Scheduling tester_mlfq with PID 4 from Queue 0 with current tick 1 at tick 697
+Process with PID 6 is removed from Queue 0 at 697
+Scheduling tester_mlfq with PID 6 from Queue 0 with current tick 1 at tick 697
+Process with PID 7 is removed from Queue 0 at 697
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 697
+Process with PID 8 is removed from Queue 0 at 697
+Scheduling tester_mlfq with PID 8 from Queue 0 with current tick 1 at tick 697
+Process with PID 4 added to Queue 0 at 698
+Process with PID 6 added to Queue 0 at 698
+Process with PID 7 added to Queue 0 at 698
+Process with PID 8 added to Queue 1 at 698
+Process with PID 4 is removed from Queue 0 at 698
+Scheduling tester_mlfq with PID 4 from Queue 0 with current tick 1 at tick 698
+Process with PID 6 is removed from Queue 0 at 698
+Scheduling tester_mlfq with PID 6 from Queue 0 with current tick 1 at tick 698
+Process with PID 7 is removed from Queue 0 at 698
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 698
+Process with PID 5 is removed from Queue 1 at 698
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 698
+Process with PID 8 is removed from Queue 1 at 698
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 698
+Process with PID 4 added to Queue 0 at 699
+Process with PID 5 added to Queue 1 at 699
+Process with PID 6 added to Queue 0 at 699
+Process with PID 7 added to Queue 0 at 699
+Process with PID 4 is removed from Queue 0 at 699
+Scheduling tester_mlfq with PID 4 from Queue 0 with current tick 1 at tick 699
+Process with PID 6 is removed from Queue 0 at 699
+Scheduling tester_mlfq with PID 6 from Queue 0 with current tick 1 at tick 699
+Process with PID 7 is removed from Queue 0 at 699
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 699
+Process with PID 5 is removed from Queue 1 at 699
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 699
+Process with PID 4 added to Queue 0 at 700
+Process with PID 5 added to Queue 1 at 700
+Process with PID 6 added to Queue 0 at 700
+Process with PID 7 added to Queue 0 at 700
+Process with PID 8 added to Queue 1 at 700
+Process with PID 4 is removed from Queue 0 at 700
+Scheduling tester_mlfq with PID 4 from Queue 0 with current tick 1 at tick 700
+Process with PID 6 is removed from Queue 0 at 700
+Scheduling tester_mlfq with PID 6 from Queue 0 with current tick 1 at tick 700
+Process with PID 7 is removed from Queue 0 at 700
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 700
+Process with PID 5 is removed from Queue 1 at 700
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 700
+Process with PID 4 added to Queue 0 at 701
+Process with PID 6 added to Queue 0 at 701
+Process with PID 7 added to Queue 0 at 701
+Process with PID 4 is removed from Queue 0 at 701
+Scheduling tester_mlfq with PID 4 from Queue 0 with current tick 1 at tick 701
+Process with PID 6 is removed from Queue 0 at 701
+Scheduling tester_mlfq with PID 6 from Queue 0 with current tick 1 at tick 701
+Process with PID 4 added to Queue 0 at 702
+Process with PID 5 added to Queue 1 at 702
+Process with PID 6 added to Queue 1 at 702
+Process with PID 7 is removed from Queue 0 at 702
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 702
+Process with PID 4 is removed from Queue 0 at 702
+Scheduling tester_mlfq with PID 4 from Queue 0 with current tick 1 at tick 702
+Process with PID 7 added to Queue 0 at 703
+Process with PID 4 added to Queue 1 at 703
+Process with PID 7 is removed from Queue 0 at 703
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 703
+Process with PID 8 is removed from Queue 1 at 703
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 703
+Process with PID 7 added to Queue 0 at 704
+Process with PID 7 is removed from Queue 0 at 704
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 704
+Process with PID 5 is removed from Queue 1 at 704
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 704
+Process with PID 6 is removed from Queue 1 at 704
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 704
+Process with PID 5 added to Queue 1 at 705
+Process with PID 7 added to Queue 0 at 705
+Process with PID 8 added to Queue 1 at 705
+Process with PID 7 is removed from Queue 0 at 705
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 705
+Process with PID 4 is removed from Queue 1 at 705
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 705
+Process with PID 6 added to Queue 1 at 706
+Process with PID 7 added to Queue 0 at 706
+Process with PID 7 is removed from Queue 0 at 706
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 706
+Process with PID 5 is removed from Queue 1 at 706
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 706
+Process with PID 4 added to Queue 1 at 707
+Process with PID 7 added to Queue 0 at 707
+Process with PID 7 is removed from Queue 0 at 707
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 707
+Process with PID 8 is removed from Queue 1 at 707
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 707
+Process with PID 6 is removed from Queue 1 at 707
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 707
+Process with PID 5 added to Queue 1 at 708
+Process with PID 7 added to Queue 0 at 708
+Process with PID 8 added to Queue 1 at 708
+Process with PID 7 is removed from Queue 0 at 708
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 708
+Process with PID 4 is removed from Queue 1 at 708
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 708
+Process with PID 5 is removed from Queue 1 at 708
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 708
+Process with PID 8 is removed from Queue 1 at 708
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 708
+Process with PID 4 added to Queue 1 at 709
+Process with PID 5 added to Queue 1 at 709
+Process with PID 6 added to Queue 1 at 709
+Process with PID 7 added to Queue 0 at 709
+Process with PID 8 added to Queue 1 at 709
+Process with PID 7 is removed from Queue 0 at 709
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 709
+Process with PID 4 is removed from Queue 1 at 709
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 709
+Process with PID 5 is removed from Queue 1 at 709
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 709
+Process with PID 6 is removed from Queue 1 at 709
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 709
+Process with PID 8 is removed from Queue 1 at 709
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 709
+Process with PID 4 added to Queue 1 at 710
+Process with PID 5 added to Queue 1 at 710
+Process with PID 6 added to Queue 1 at 710
+Process with PID 7 added to Queue 0 at 710
+Process with PID 7 is removed from Queue 0 at 710
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 710
+Process with PID 4 is removed from Queue 1 at 710
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 710
+Process with PID 7 added to Queue 0 at 711
+Process with PID 8 added to Queue 1 at 711
+Process with PID 7 is removed from Queue 0 at 711
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 711
+Process with PID 5 is removed from Queue 1 at 711
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 711
+Process with PID 6 is removed from Queue 1 at 711
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 711
+Process with PID 8 is removed from Queue 1 at 711
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 711
+Process with PID 4 added to Queue 1 at 712
+Process with PID 5 added to Queue 1 at 712
+Process with PID 6 added to Queue 1 at 712
+Process with PID 7 added to Queue 0 at 712
+Process with PID 8 added to Queue 1 at 712
+Process with PID 7 is removed from Queue 0 at 712
+Scheduling tester_mlfq with PID 7 from Queue 0 with current tick 1 at tick 712
+Process with PID 7 added to Queue 1 at 713
+Process with PID 4 is removed from Queue 1 at 713
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 713
+Process with PID 5 is removed from Queue 1 at 713
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 713
+Process with PID 6 is removed from Queue 1 at 713
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 713
+Process with PID 8 is removed from Queue 1 at 713
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 713
+Process with PID 4 added to Queue 1 at 714
+Process with PID 5 added to Queue 1 at 714
+Process with PID 6 added to Queue 1 at 714
+Process with PID 7 is removed from Queue 1 at 714
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 714
+Process with PID 4 is removed from Queue 1 at 714
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 714
+Process with PID 5 is removed from Queue 1 at 714
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 714
+Process with PID 6 is removed from Queue 1 at 714
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 714
+Process with PID 4 added to Queue 1 at 715
+Process with PID 5 added to Queue 1 at 715
+Process with PID 6 added to Queue 1 at 715
+Process with PID 7 added to Queue 1 at 715
+Process with PID 8 added to Queue 1 at 715
+Process with PID 4 is removed from Queue 1 at 715
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 715
+Process with PID 5 is removed from Queue 1 at 715
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 715
+Process with PID 6 is removed from Queue 1 at 715
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 715
+Process with PID 7 is removed from Queue 1 at 715
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 715
+Process with PID 4 added to Queue 1 at 716
+Process with PID 5 added to Queue 1 at 716
+Process with PID 6 added to Queue 1 at 716
+Process with PID 8 is removed from Queue 1 at 716
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 716
+Process with PID 4 is removed from Queue 1 at 716
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 716
+Process with PID 5 is removed from Queue 1 at 716
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 716
+Process with PID 6 is removed from Queue 1 at 716
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 716
+Process with PID 4 added to Queue 1 at 717
+Process with PID 5 added to Queue 1 at 717
+Process with PID 6 added to Queue 1 at 717
+Process with PID 7 added to Queue 1 at 717
+Process with PID 8 added to Queue 1 at 717
+Process with PID 4 is removed from Queue 1 at 717
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 717
+Process with PID 5 is removed from Queue 1 at 717
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 717
+Process with PID 6 is removed from Queue 1 at 717
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 717
+Process with PID 7 is removed from Queue 1 at 717
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 717
+Process with PID 8 is removed from Queue 1 at 717
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 717
+Process with PID 4 added to Queue 1 at 718
+Process with PID 5 added to Queue 1 at 718
+Process with PID 6 added to Queue 1 at 718
+Process with PID 7 added to Queue 1 at 718
+Process with PID 4 is removed from Queue 1 at 718
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 718
+Process with PID 5 is removed from Queue 1 at 718
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 718
+Process with PID 6 is removed from Queue 1 at 718
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 718
+Process with PID 7 is removed from Queue 1 at 718
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 718
+Process with PID 4 added to Queue 1 at 719
+Process with PID 5 added to Queue 1 at 719
+Process with PID 6 added to Queue 1 at 719
+Process with PID 8 added to Queue 1 at 719
+Process with PID 4 is removed from Queue 1 at 719
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 719
+Process with PID 5 is removed from Queue 1 at 719
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 719
+Process with PID 6 is removed from Queue 1 at 719
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 719
+Process with PID 8 is removed from Queue 1 at 719
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 719
+Process with PID 4 added to Queue 1 at 720
+Process with PID 5 added to Queue 1 at 720
+Process with PID 6 added to Queue 1 at 720
+Process with PID 7 added to Queue 1 at 720
+Process with PID 8 added to Queue 1 at 720
+Process with PID 4 is removed from Queue 1 at 720
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 720
+Process with PID 5 is removed from Queue 1 at 720
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 720
+Process with PID 6 is removed from Queue 1 at 720
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 720
+Process with PID 7 is removed from Queue 1 at 720
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 720
+Process with PID 8 is removed from Queue 1 at 720
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 720
+Process with PID 4 added to Queue 1 at 721
+Process with PID 5 added to Queue 1 at 721
+Process with PID 6 added to Queue 1 at 721
+Process with PID 7 added to Queue 1 at 721
+Process with PID 4 is removed from Queue 1 at 721
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 721
+Process with PID 5 is removed from Queue 1 at 721
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 721
+Process with PID 6 is removed from Queue 1 at 721
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 721
+Process with PID 7 is removed from Queue 1 at 721
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 721
+Process with PID 4 added to Queue 1 at 722
+Process with PID 5 added to Queue 1 at 722
+Process with PID 6 added to Queue 1 at 722
+Process with PID 8 added to Queue 1 at 722
+Process with PID 4 is removed from Queue 1 at 722
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 722
+Process with PID 5 is removed from Queue 1 at 722
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 722
+Process with PID 6 is removed from Queue 1 at 722
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 722
+Process with PID 8 is removed from Queue 1 at 722
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 722
+Process with PID 4 added to Queue 1 at 723
+Process with PID 5 added to Queue 1 at 723
+Process with PID 6 added to Queue 1 at 723
+Process with PID 7 added to Queue 1 at 723
+Process with PID 8 added to Queue 1 at 723
+Process with PID 4 is removed from Queue 1 at 723
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 723
+Process with PID 5 is removed from Queue 1 at 723
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 723
+Process with PID 6 is removed from Queue 1 at 723
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 723
+Process with PID 7 is removed from Queue 1 at 723
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 723
+Process with PID 8 is removed from Queue 1 at 723
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 723
+Process with PID 4 added to Queue 1 at 724
+Process with PID 5 added to Queue 1 at 724
+Process with PID 6 added to Queue 1 at 724
+Process with PID 7 added to Queue 1 at 724
+Process with PID 4 is removed from Queue 1 at 724
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 724
+Process with PID 5 is removed from Queue 1 at 724
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 724
+Process with PID 6 is removed from Queue 1 at 724
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 724
+Process with PID 7 is removed from Queue 1 at 724
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 724
+Process with PID 4 added to Queue 1 at 725
+Process with PID 5 added to Queue 1 at 725
+Process with PID 6 added to Queue 1 at 725
+Process with PID 8 added to Queue 1 at 725
+Process with PID 4 is removed from Queue 1 at 725
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 725
+Process with PID 5 is removed from Queue 1 at 725
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 725
+Process with PID 6 is removed from Queue 1 at 725
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 725
+Process with PID 8 is removed from Queue 1 at 725
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 725
+Process with PID 4 added to Queue 1 at 726
+Process with PID 5 added to Queue 1 at 726
+Process with PID 6 added to Queue 1 at 726
+Process with PID 7 added to Queue 1 at 726
+Process with PID 8 added to Queue 1 at 726
+Process with PID 4 is removed from Queue 1 at 726
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 726
+Process with PID 5 is removed from Queue 1 at 726
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 726
+Process with PID 6 is removed from Queue 1 at 726
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 726
+Process with PID 7 is removed from Queue 1 at 726
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 726
+Process with PID 8 is removed from Queue 1 at 726
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 726
+Process with PID 4 added to Queue 1 at 727
+Process with PID 5 added to Queue 1 at 727
+Process with PID 6 added to Queue 1 at 727
+Process with PID 7 added to Queue 1 at 727
+Process with PID 4 is removed from Queue 1 at 727
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 727
+Process with PID 5 is removed from Queue 1 at 727
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 727
+Process with PID 6 is removed from Queue 1 at 727
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 727
+Process with PID 7 is removed from Queue 1 at 727
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 727
+Process with PID 4 added to Queue 1 at 728
+Process with PID 5 added to Queue 1 at 728
+Process with PID 6 added to Queue 1 at 728
+Process with PID 8 added to Queue 1 at 728
+Process with PID 4 is removed from Queue 1 at 728
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 728
+Process with PID 5 is removed from Queue 1 at 728
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 728
+Process with PID 6 is removed from Queue 1 at 728
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 728
+Process with PID 8 is removed from Queue 1 at 728
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 728
+Process with PID 4 added to Queue 1 at 729
+Process with PID 5 added to Queue 1 at 729
+Process with PID 6 added to Queue 1 at 729
+Process with PID 7 added to Queue 1 at 729
+Process with PID 4 is removed from Queue 1 at 729
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 729
+Process with PID 5 is removed from Queue 1 at 729
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 729
+Process with PID 6 is removed from Queue 1 at 729
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 729
+Process with PID 7 is removed from Queue 1 at 729
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 729
+Process with PID 4 added to Queue 1 at 730
+Process with PID 5 added to Queue 1 at 730
+Process with PID 6 added to Queue 1 at 730
+Process with PID 7 added to Queue 1 at 730
+Process with PID 8 added to Queue 1 at 730
+Process with PID 4 is removed from Queue 1 at 730
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 730
+Process with PID 5 is removed from Queue 1 at 730
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 730
+Process with PID 6 is removed from Queue 1 at 730
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 730
+Process with PID 7 is removed from Queue 1 at 730
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 730
+Process with PID 4 added to Queue 1 at 731
+Process with PID 5 added to Queue 1 at 731
+Process with PID 6 added to Queue 1 at 731
+Process with PID 8 is removed from Queue 1 at 731
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 731
+Process with PID 4 is removed from Queue 1 at 731
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 731
+Process with PID 5 is removed from Queue 1 at 731
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 731
+Process with PID 6 is removed from Queue 1 at 731
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 731
+Process with PID 4 added to Queue 1 at 732
+Process with PID 5 added to Queue 1 at 732
+Process with PID 6 added to Queue 1 at 732
+Process with PID 7 added to Queue 1 at 732
+Process with PID 8 added to Queue 1 at 732
+Process with PID 4 is removed from Queue 1 at 732
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 732
+Process with PID 5 is removed from Queue 1 at 732
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 732
+Process with PID 6 is removed from Queue 1 at 732
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 732
+Process with PID 7 is removed from Queue 1 at 732
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 732
+Process with PID 8 is removed from Queue 1 at 732
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 732
+Process with PID 4 added to Queue 1 at 733
+Process with PID 5 added to Queue 1 at 733
+Process with PID 6 added to Queue 1 at 733
+Process with PID 7 added to Queue 1 at 733
+Process with PID 4 is removed from Queue 1 at 733
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 733
+Process with PID 5 is removed from Queue 1 at 733
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 733
+Process with PID 6 is removed from Queue 1 at 733
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 733
+Process with PID 4 added to Queue 1 at 734
+Process with PID 5 added to Queue 1 at 734
+Process with PID 8 added to Queue 1 at 734
+Process with PID 7 is removed from Queue 1 at 734
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 734
+Process with PID 4 is removed from Queue 1 at 734
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 734
+Process with PID 5 is removed from Queue 1 at 734
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 734
+Process with PID 4 added to Queue 1 at 735
+Process with PID 6 added to Queue 1 at 735
+Process with PID 7 added to Queue 1 at 735
+Process with PID 8 is removed from Queue 1 at 735
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 735
+Process with PID 5 added to Queue 1 at 736
+Process with PID 4 is removed from Queue 1 at 736
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 736
+Process with PID 6 is removed from Queue 1 at 736
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 736
+Process with PID 7 is removed from Queue 1 at 736
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 736
+Process with PID 5 is removed from Queue 1 at 736
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 736
+Process with PID 4 added to Queue 1 at 737
+Process with PID 6 added to Queue 1 at 737
+Process with PID 7 added to Queue 1 at 737
+Process with PID 8 added to Queue 1 at 737
+Process with PID 4 is removed from Queue 1 at 737
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 737
+Process with PID 6 is removed from Queue 1 at 737
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 737
+Process with PID 7 is removed from Queue 1 at 737
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 737
+Process with PID 8 is removed from Queue 1 at 737
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 737
+Process with PID 4 added to Queue 1 at 738
+Process with PID 5 added to Queue 1 at 738
+Process with PID 6 added to Queue 1 at 738
+Process with PID 7 added to Queue 1 at 738
+Process with PID 4 is removed from Queue 1 at 738
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 738
+Process with PID 5 is removed from Queue 1 at 738
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 738
+Process with PID 6 is removed from Queue 1 at 738
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 738
+Process with PID 7 is removed from Queue 1 at 738
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 738
+Process with PID 4 added to Queue 1 at 739
+Process with PID 5 added to Queue 1 at 739
+Process with PID 6 added to Queue 1 at 739
+Process with PID 7 added to Queue 1 at 739
+Process with PID 8 added to Queue 1 at 739
+Process with PID 4 is removed from Queue 1 at 739
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 739
+Process with PID 5 is removed from Queue 1 at 739
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 739
+Process with PID 6 is removed from Queue 1 at 739
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 739
+Process with PID 7 is removed from Queue 1 at 739
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 739
+Process with PID 8 is removed from Queue 1 at 739
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 739
+Process with PID 4 added to Queue 1 at 740
+Process with PID 5 added to Queue 1 at 740
+Process with PID 6 added to Queue 1 at 740
+Process with PID 7 added to Queue 1 at 740
+Process with PID 4 is removed from Queue 1 at 740
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 740
+Process with PID 5 is removed from Queue 1 at 740
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 740
+Process with PID 6 is removed from Queue 1 at 740
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 740
+Process with PID 7 is removed from Queue 1 at 740
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 740
+Process with PID 4 added to Queue 1 at 741
+Process with PID 5 added to Queue 1 at 741
+Process with PID 6 added to Queue 1 at 741
+Process with PID 8 added to Queue 1 at 741
+Process with PID 4 is removed from Queue 1 at 741
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 741
+Process with PID 5 is removed from Queue 1 at 741
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 741
+Process with PID 6 is removed from Queue 1 at 741
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 741
+Process with PID 8 is removed from Queue 1 at 741
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 741
+Process with PID 4 added to Queue 1 at 742
+Process with PID 5 added to Queue 1 at 742
+Process with PID 6 added to Queue 1 at 742
+Process with PID 7 added to Queue 1 at 742
+Process with PID 8 added to Queue 1 at 742
+Process with PID 4 is removed from Queue 1 at 742
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 742
+Process with PID 5 is removed from Queue 1 at 742
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 742
+Process with PID 6 is removed from Queue 1 at 742
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 742
+Process with PID 7 is removed from Queue 1 at 742
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 742
+Process with PID 4 added to Queue 1 at 743
+Process with PID 5 added to Queue 1 at 743
+Process with PID 6 added to Queue 1 at 743
+Process with PID 8 is removed from Queue 1 at 743
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 743
+Process with PID 4 is removed from Queue 1 at 743
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 743
+Process with PID 5 is removed from Queue 1 at 743
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 743
+Process with PID 6 is removed from Queue 1 at 743
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 743
+Process with PID 4 added to Queue 1 at 744
+Process with PID 5 added to Queue 1 at 744
+Process with PID 6 added to Queue 1 at 744
+Process with PID 7 added to Queue 1 at 744
+Process with PID 8 added to Queue 1 at 744
+Process with PID 4 is removed from Queue 1 at 744
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 744
+Process with PID 5 is removed from Queue 1 at 744
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 744
+Process with PID 6 is removed from Queue 1 at 744
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 744
+Process with PID 7 is removed from Queue 1 at 744
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 744
+Process with PID 8 is removed from Queue 1 at 744
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 744
+Process with PID 4 added to Queue 1 at 745
+Process with PID 5 added to Queue 1 at 745
+Process with PID 6 added to Queue 1 at 745
+Process with PID 7 added to Queue 1 at 745
+Process with PID 4 is removed from Queue 1 at 745
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 745
+Process with PID 5 is removed from Queue 1 at 745
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 745
+Process with PID 6 is removed from Queue 1 at 745
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 745
+Process with PID 7 is removed from Queue 1 at 745
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 745
+Process with PID 4 added to Queue 1 at 746
+Process with PID 5 added to Queue 1 at 746
+Process with PID 6 added to Queue 1 at 746
+Process with PID 8 added to Queue 1 at 746
+Process with PID 4 is removed from Queue 1 at 746
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 746
+Process with PID 5 is removed from Queue 1 at 746
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 746
+Process with PID 6 is removed from Queue 1 at 746
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 746
+Process with PID 8 is removed from Queue 1 at 746
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 746
+Process with PID 4 added to Queue 1 at 747
+Process with PID 5 added to Queue 1 at 747
+Process with PID 6 added to Queue 1 at 747
+Process with PID 7 added to Queue 1 at 747
+Process with PID 8 added to Queue 1 at 747
+Process with PID 4 is removed from Queue 1 at 747
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 747
+Process with PID 5 is removed from Queue 1 at 747
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 747
+Process with PID 6 is removed from Queue 1 at 747
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 747
+Process with PID 7 is removed from Queue 1 at 747
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 747
+Process with PID 8 is removed from Queue 1 at 747
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 747
+Process with PID 4 added to Queue 1 at 748
+Process with PID 5 added to Queue 1 at 748
+Process with PID 6 added to Queue 1 at 748
+Process with PID 7 added to Queue 1 at 748
+Process with PID 4 is removed from Queue 1 at 748
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 748
+Process with PID 5 is removed from Queue 1 at 748
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 748
+Process with PID 6 is removed from Queue 1 at 748
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 748
+Process with PID 4 added to Queue 1 at 749
+Process with PID 5 added to Queue 1 at 749
+Process with PID 8 added to Queue 1 at 749
+Process with PID 7 is removed from Queue 1 at 749
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 749
+Process with PID 4 is removed from Queue 1 at 749
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 749
+Process with PID 5 is removed from Queue 1 at 749
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 749
+Process with PID 8 is removed from Queue 1 at 749
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 749
+Process with PID 4 added to Queue 1 at 750
+Process with PID 5 added to Queue 1 at 750
+Process with PID 6 added to Queue 1 at 750
+Process with PID 7 added to Queue 1 at 750
+Process with PID 8 added to Queue 1 at 750
+Process with PID 4 is removed from Queue 1 at 750
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 750
+Process with PID 5 is removed from Queue 1 at 750
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 750
+Process with PID 6 is removed from Queue 1 at 750
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 750
+Process with PID 7 is removed from Queue 1 at 750
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 750
+Process with PID 8 is removed from Queue 1 at 750
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 750
+Process with PID 4 added to Queue 1 at 751
+Process with PID 5 added to Queue 1 at 751
+Process with PID 6 added to Queue 1 at 751
+Process with PID 7 added to Queue 1 at 751
+Process with PID 4 is removed from Queue 1 at 751
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 751
+Process with PID 5 is removed from Queue 1 at 751
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 751
+Process with PID 6 is removed from Queue 1 at 751
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 751
+Process with PID 7 is removed from Queue 1 at 751
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 751
+Process with PID 4 added to Queue 1 at 752
+Process with PID 5 added to Queue 1 at 752
+Process with PID 6 added to Queue 1 at 752
+Process with PID 8 added to Queue 1 at 752
+Process with PID 4 is removed from Queue 1 at 752
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 752
+Process with PID 5 is removed from Queue 1 at 752
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 752
+Process with PID 6 is removed from Queue 1 at 752
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 752
+Process with PID 8 is removed from Queue 1 at 752
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 752
+Process with PID 4 added to Queue 1 at 753
+Process with PID 5 added to Queue 1 at 753
+Process with PID 6 added to Queue 1 at 753
+Process with PID 7 added to Queue 1 at 753
+Process with PID 8 added to Queue 1 at 753
+Process with PID 4 is removed from Queue 1 at 753
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 753
+Process with PID 5 is removed from Queue 1 at 753
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 753
+Process with PID 6 is removed from Queue 1 at 753
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 753
+Process with PID 7 is removed from Queue 1 at 753
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 753
+Process with PID 8 is removed from Queue 1 at 753
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 753
+Process with PID 4 added to Queue 1 at 754
+Process with PID 5 added to Queue 1 at 754
+Process with PID 6 added to Queue 1 at 754
+Process with PID 7 added to Queue 1 at 754
+Process with PID 4 is removed from Queue 1 at 754
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 754
+Process with PID 5 is removed from Queue 1 at 754
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 754
+Process with PID 6 is removed from Queue 1 at 754
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 754
+Process with PID 7 is removed from Queue 1 at 754
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 754
+Process with PID 4 added to Queue 1 at 755
+Process with PID 5 added to Queue 1 at 755
+Process with PID 6 added to Queue 1 at 755
+Process with PID 8 added to Queue 1 at 755
+Process with PID 4 is removed from Queue 1 at 755
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 755
+Process with PID 5 is removed from Queue 1 at 755
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 755
+Process with PID 6 is removed from Queue 1 at 755
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 755
+Process with PID 8 is removed from Queue 1 at 755
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 755
+Process with PID 4 added to Queue 1 at 756
+Process with PID 5 added to Queue 1 at 756
+Process with PID 6 added to Queue 1 at 756
+Process with PID 7 added to Queue 1 at 756
+Process with PID 4 is removed from Queue 1 at 756
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 756
+Process with PID 5 is removed from Queue 1 at 756
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 756
+Process with PID 6 is removed from Queue 1 at 756
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 756
+Process with PID 7 is removed from Queue 1 at 756
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 756
+Process with PID 4 added to Queue 1 at 757
+Process with PID 5 added to Queue 1 at 757
+Process with PID 6 added to Queue 1 at 757
+Process with PID 7 added to Queue 1 at 757
+Process with PID 8 added to Queue 1 at 757
+Process with PID 4 is removed from Queue 1 at 757
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 757
+Process with PID 5 is removed from Queue 1 at 757
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 757
+Process with PID 6 is removed from Queue 1 at 757
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 757
+Process with PID 7 is removed from Queue 1 at 757
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 757
+Process with PID 4 added to Queue 1 at 758
+Process with PID 5 added to Queue 1 at 758
+Process with PID 6 added to Queue 1 at 758
+Process with PID 8 is removed from Queue 1 at 758
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 758
+Process with PID 4 is removed from Queue 1 at 758
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 758
+Process with PID 5 is removed from Queue 1 at 758
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 758
+Process with PID 6 is removed from Queue 1 at 758
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 758
+Process with PID 4 added to Queue 1 at 759
+Process with PID 5 added to Queue 1 at 759
+Process with PID 6 added to Queue 1 at 759
+Process with PID 7 added to Queue 1 at 759
+Process with PID 8 added to Queue 1 at 759
+Process with PID 4 is removed from Queue 1 at 759
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 759
+Process with PID 5 is removed from Queue 1 at 759
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 759
+Process with PID 6 is removed from Queue 1 at 759
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 759
+Process with PID 4 added to Queue 1 at 760
+Process with PID 5 added to Queue 1 at 760
+Process with PID 7 is removed from Queue 1 at 760
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 760
+Process with PID 8 is removed from Queue 1 at 760
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 760
+Process with PID 4 is removed from Queue 1 at 760
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 760
+Process with PID 5 is removed from Queue 1 at 760
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 760
+Process with PID 4 added to Queue 1 at 761
+Process with PID 6 added to Queue 1 at 761
+Process with PID 7 added to Queue 1 at 761
+Process with PID 8 added to Queue 1 at 761
+Process with PID 4 is removed from Queue 1 at 761
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 761
+Process with PID 6 is removed from Queue 1 at 761
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 761
+Process with PID 7 is removed from Queue 1 at 761
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 761
+Process with PID 8 is removed from Queue 1 at 761
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 761
+Process with PID 4 added to Queue 1 at 762
+Process with PID 5 added to Queue 1 at 762
+Process with PID 6 added to Queue 1 at 762
+Process with PID 7 added to Queue 1 at 762
+Process with PID 8 added to Queue 1 at 762
+Process with PID 4 is removed from Queue 1 at 762
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 762
+Process with PID 5 is removed from Queue 1 at 762
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 762
+Process with PID 6 is removed from Queue 1 at 762
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 762
+Process with PID 7 is removed from Queue 1 at 762
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 762
+Process with PID 8 is removed from Queue 1 at 762
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 762
+Process with PID 4 added to Queue 1 at 763
+Process with PID 5 added to Queue 1 at 763
+Process with PID 6 added to Queue 1 at 763
+Process with PID 7 added to Queue 1 at 763
+Process with PID 4 is removed from Queue 1 at 763
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 763
+Process with PID 5 is removed from Queue 1 at 763
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 763
+Process with PID 6 is removed from Queue 1 at 763
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 763
+Process with PID 7 is removed from Queue 1 at 763
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 763
+Process with PID 4 added to Queue 1 at 764
+Process with PID 5 added to Queue 1 at 764
+Process with PID 6 added to Queue 1 at 764
+Process with PID 8 added to Queue 1 at 764
+Process with PID 4 is removed from Queue 1 at 764
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 764
+Process with PID 5 is removed from Queue 1 at 764
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 764
+Process with PID 6 is removed from Queue 1 at 764
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 764
+Process with PID 8 is removed from Queue 1 at 764
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 764
+Process with PID 4 added to Queue 1 at 765
+Process with PID 5 added to Queue 1 at 765
+Process with PID 6 added to Queue 1 at 765
+Process with PID 7 added to Queue 1 at 765
+Process with PID 4 is removed from Queue 1 at 765
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 765
+Process with PID 5 is removed from Queue 1 at 765
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 765
+Process with PID 6 is removed from Queue 1 at 765
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 765
+Process with PID 7 is removed from Queue 1 at 765
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 765
+Process with PID 4 added to Queue 1 at 766
+Process with PID 5 added to Queue 1 at 766
+Process with PID 6 added to Queue 1 at 766
+Process with PID 7 added to Queue 1 at 766
+Process with PID 8 added to Queue 1 at 766
+Process with PID 4 is removed from Queue 1 at 766
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 766
+Process with PID 5 is removed from Queue 1 at 766
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 766
+Process with PID 6 is removed from Queue 1 at 766
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 766
+Process with PID 7 is removed from Queue 1 at 766
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 766
+Process with PID 4 added to Queue 1 at 767
+Process with PID 5 added to Queue 1 at 767
+Process with PID 6 added to Queue 1 at 767
+Process with PID 8 is removed from Queue 1 at 767
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 767
+Process with PID 4 is removed from Queue 1 at 767
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 767
+Process with PID 5 is removed from Queue 1 at 767
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 767
+Process with PID 6 is removed from Queue 1 at 767
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 767
+Process with PID 4 added to Queue 1 at 768
+Process with PID 5 added to Queue 1 at 768
+Process with PID 6 added to Queue 1 at 768
+Process with PID 7 added to Queue 1 at 768
+Process with PID 8 added to Queue 1 at 768
+Process with PID 4 is removed from Queue 1 at 768
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 768
+Process with PID 5 is removed from Queue 1 at 768
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 768
+Process with PID 6 is removed from Queue 1 at 768
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 768
+Process with PID 7 is removed from Queue 1 at 768
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 768
+Process with PID 8 is removed from Queue 1 at 768
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 768
+Process with PID 4 added to Queue 1 at 769
+Process with PID 5 added to Queue 1 at 769
+Process with PID 6 added to Queue 1 at 769
+Process with PID 7 added to Queue 1 at 769
+Process with PID 4 is removed from Queue 1 at 769
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 769
+Process with PID 5 is removed from Queue 1 at 769
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 769
+Process with PID 6 is removed from Queue 1 at 769
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 769
+Process with PID 7 is removed from Queue 1 at 769
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 769
+Process with PID 4 added to Queue 1 at 770
+Process with PID 5 added to Queue 1 at 770
+Process with PID 6 added to Queue 1 at 770
+Process with PID 8 added to Queue 1 at 770
+Process with PID 4 is removed from Queue 1 at 770
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 770
+Process with PID 5 is removed from Queue 1 at 770
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 770
+Process with PID 6 is removed from Queue 1 at 770
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 770
+Process with PID 4 added to Queue 1 at 771
+Process with PID 5 added to Queue 1 at 771
+Process with PID 7 added to Queue 1 at 771
+Process with PID 8 is removed from Queue 1 at 771
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 771
+Process with PID 4 is removed from Queue 1 at 771
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 771
+Process with PID 5 is removed from Queue 1 at 771
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 771
+Process with PID 7 is removed from Queue 1 at 771
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 771
+Process with PID 4 added to Queue 1 at 772
+Process with PID 5 added to Queue 1 at 772
+Process with PID 6 added to Queue 1 at 772
+Process with PID 7 added to Queue 1 at 772
+Process with PID 8 added to Queue 1 at 772
+Process with PID 4 is removed from Queue 1 at 772
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 772
+Process with PID 5 is removed from Queue 1 at 773
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 773
+Process with PID 6 is removed from Queue 1 at 773
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 773
+Process with PID 7 is removed from Queue 1 at 773
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 773
+Process with PID 8 is removed from Queue 1 at 773
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 773
+Process with PID 4 added to Queue 1 at 774
+Process with PID 5 added to Queue 1 at 774
+Process with PID 6 added to Queue 1 at 774
+Process with PID 7 added to Queue 1 at 774
+Process with PID 4 is removed from Queue 1 at 774
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 774
+Process with PID 5 is removed from Queue 1 at 774
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 774
+Process with PID 6 is removed from Queue 1 at 774
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 774
+Process with PID 7 is removed from Queue 1 at 774
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 774
+Process with PID 4 added to Queue 1 at 775
+Process with PID 5 added to Queue 1 at 775
+Process with PID 6 added to Queue 1 at 775
+Process with PID 7 added to Queue 1 at 775
+Process with PID 8 added to Queue 1 at 775
+Process with PID 4 is removed from Queue 1 at 775
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 775
+Process with PID 5 is removed from Queue 1 at 775
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 775
+Process with PID 6 is removed from Queue 1 at 775
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 775
+Process with PID 7 is removed from Queue 1 at 775
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 775
+Process with PID 8 is removed from Queue 1 at 775
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 775
+Process with PID 4 added to Queue 1 at 776
+Process with PID 5 added to Queue 1 at 776
+Process with PID 6 added to Queue 1 at 776
+Process with PID 7 added to Queue 1 at 776
+Process with PID 8 added to Queue 1 at 776
+Process with PID 4 is removed from Queue 1 at 776
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 776
+Process with PID 5 is removed from Queue 1 at 776
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 776
+Process with PID 6 is removed from Queue 1 at 776
+Scheduling tester_mlfq with PID 6 from Queue 1 with current tick 1 at tick 776
+Process with PID 4 added to Queue 1 at 777
+Process with PID 5 added to Queue 1 at 777
+Process with PID 6 added to Queue 2 at 778
+Process with PID 7 is removed from Queue 1 at 778
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 778
+Process with PID 8 is removed from Queue 1 at 778
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 778
+Process with PID 4 is removed from Queue 1 at 778
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 778
+Process with PID 7 added to Queue 1 at 779
+Process with PID 8 added to Queue 1 at 779
+Process with PID 5 is removed from Queue 1 at 779
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 779
+Process with PID 7 is removed from Queue 1 at 779
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 779
+Process with PID 8 is removed from Queue 1 at 779
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 779
+Process with PID 6 is removed from Queue 2 at 779
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 779
+Process with PID 4 added to Queue 1 at 780
+Process with PID 5 added to Queue 1 at 780
+Process with PID 6 added to Queue 2 at 780
+Process with PID 7 added to Queue 1 at 780
+Process with PID 8 added to Queue 1 at 780
+Process with PID 4 is removed from Queue 1 at 780
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 780
+Process with PID 5 is removed from Queue 1 at 780
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 780
+Process with PID 7 is removed from Queue 1 at 780
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 780
+Process with PID 8 is removed from Queue 1 at 780
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 780
+Process with PID 4 added to Queue 1 at 781
+Process with PID 5 added to Queue 1 at 781
+Process with PID 7 added to Queue 1 at 781
+Process with PID 4 is removed from Queue 1 at 781
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 781
+Process with PID 5 is removed from Queue 1 at 781
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 781
+Process with PID 7 is removed from Queue 1 at 781
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 781
+Process with PID 6 is removed from Queue 2 at 781
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 781
+Process with PID 4 added to Queue 1 at 782
+Process with PID 5 added to Queue 1 at 782
+Process with PID 6 added to Queue 2 at 782
+Process with PID 7 added to Queue 1 at 782
+Process with PID 8 added to Queue 1 at 782
+Process with PID 4 is removed from Queue 1 at 782
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 782
+Process with PID 5 is removed from Queue 1 at 782
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 782
+Process with PID 7 is removed from Queue 1 at 782
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 782
+Process with PID 8 is removed from Queue 1 at 782
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 782
+Process with PID 4 added to Queue 1 at 783
+Process with PID 5 added to Queue 1 at 783
+Process with PID 7 added to Queue 1 at 783
+Process with PID 4 is removed from Queue 1 at 783
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 783
+Process with PID 5 is removed from Queue 1 at 783
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 783
+Process with PID 7 is removed from Queue 1 at 783
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 783
+Process with PID 6 is removed from Queue 2 at 783
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 783
+Process with PID 4 added to Queue 1 at 784
+Process with PID 5 added to Queue 1 at 784
+Process with PID 6 added to Queue 2 at 784
+Process with PID 7 added to Queue 1 at 784
+Process with PID 8 added to Queue 1 at 784
+Process with PID 4 is removed from Queue 1 at 784
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 784
+Process with PID 5 is removed from Queue 1 at 785
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 785
+Process with PID 7 is removed from Queue 1 at 785
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 785
+Process with PID 8 is removed from Queue 1 at 785
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 785
+Process with PID 4 added to Queue 1 at 786
+Process with PID 5 added to Queue 1 at 786
+Process with PID 7 added to Queue 1 at 786
+Process with PID 4 is removed from Queue 1 at 786
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 786
+Process with PID 5 is removed from Queue 1 at 786
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 786
+Process with PID 7 is removed from Queue 1 at 786
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 786
+Process with PID 4 added to Queue 1 at 787
+Process with PID 5 added to Queue 1 at 787
+Process with PID 8 added to Queue 1 at 787
+Process with PID 4 is removed from Queue 1 at 787
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 787
+Process with PID 5 is removed from Queue 1 at 787
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 787
+Process with PID 8 is removed from Queue 1 at 787
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 787
+Process with PID 6 is removed from Queue 2 at 787
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 787
+Process with PID 4 added to Queue 1 at 788
+Process with PID 5 added to Queue 1 at 788
+Process with PID 7 added to Queue 1 at 788
+Process with PID 8 added to Queue 1 at 788
+Process with PID 4 is removed from Queue 1 at 788
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 788
+Process with PID 5 is removed from Queue 1 at 788
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 788
+Process with PID 7 is removed from Queue 1 at 788
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 788
+Process with PID 8 is removed from Queue 1 at 788
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 788
+Process with PID 4 added to Queue 1 at 789
+Process with PID 5 added to Queue 1 at 789
+Process with PID 6 added to Queue 2 at 789
+Process with PID 7 added to Queue 1 at 789
+Process with PID 4 is removed from Queue 1 at 789
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 789
+Process with PID 5 is removed from Queue 1 at 789
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 789
+Process with PID 7 is removed from Queue 1 at 789
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 789
+Process with PID 6 is removed from Queue 2 at 789
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 789
+Process with PID 4 added to Queue 1 at 790
+Process with PID 5 added to Queue 1 at 790
+Process with PID 7 added to Queue 1 at 790
+Process with PID 8 added to Queue 1 at 790
+Process with PID 4 is removed from Queue 1 at 790
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 790
+Process with PID 5 is removed from Queue 1 at 790
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 790
+Process with PID 7 is removed from Queue 1 at 790
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 790
+Process with PID 8 is removed from Queue 1 at 790
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 790
+Process with PID 4 added to Queue 1 at 791
+Process with PID 5 added to Queue 1 at 791
+Process with PID 6 added to Queue 2 at 791
+Process with PID 7 added to Queue 1 at 791
+Process with PID 4 is removed from Queue 1 at 791
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 791
+Process with PID 5 is removed from Queue 1 at 791
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 791
+Process with PID 7 is removed from Queue 1 at 791
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 791
+Process with PID 6 is removed from Queue 2 at 791
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 791
+Process with PID 4 added to Queue 1 at 792
+Process with PID 5 added to Queue 1 at 792
+Process with PID 7 added to Queue 1 at 792
+Process with PID 8 added to Queue 1 at 792
+Process with PID 4 is removed from Queue 1 at 792
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 792
+Process with PID 5 is removed from Queue 1 at 792
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 792
+Process with PID 7 is removed from Queue 1 at 792
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 792
+Process with PID 4 added to Queue 1 at 793
+Process with PID 5 added to Queue 1 at 793
+Process with PID 6 added to Queue 2 at 793
+Process with PID 8 is removed from Queue 1 at 793
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 793
+Process with PID 4 is removed from Queue 1 at 793
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 793
+Process with PID 5 is removed from Queue 1 at 793
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 793
+Process with PID 6 is removed from Queue 2 at 793
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 793
+Process with PID 4 added to Queue 1 at 794
+Process with PID 5 added to Queue 1 at 794
+Process with PID 6 added to Queue 2 at 794
+Process with PID 7 added to Queue 1 at 794
+Process with PID 8 added to Queue 1 at 794
+Process with PID 4 is removed from Queue 1 at 794
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 794
+Process with PID 5 is removed from Queue 1 at 794
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 794
+Process with PID 7 is removed from Queue 1 at 794
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 794
+Process with PID 8 is removed from Queue 1 at 794
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 794
+Process with PID 4 added to Queue 1 at 795
+Process with PID 5 added to Queue 1 at 795
+Process with PID 7 added to Queue 1 at 795
+Process with PID 4 is removed from Queue 1 at 795
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 795
+Process with PID 5 is removed from Queue 1 at 795
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 795
+Process with PID 7 is removed from Queue 1 at 795
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 795
+Process with PID 6 is removed from Queue 2 at 795
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 795
+Process with PID 4 added to Queue 1 at 796
+Process with PID 5 added to Queue 1 at 796
+Process with PID 7 added to Queue 1 at 796
+Process with PID 8 added to Queue 1 at 796
+Process with PID 4 is removed from Queue 1 at 796
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 796
+Process with PID 5 is removed from Queue 1 at 796
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 796
+Process with PID 7 is removed from Queue 1 at 796
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 796
+Process with PID 4 added to Queue 1 at 797
+Process with PID 5 added to Queue 1 at 797
+Process with PID 6 added to Queue 2 at 797
+Process with PID 8 is removed from Queue 1 at 797
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 797
+Process with PID 4 is removed from Queue 1 at 797
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 797
+Process with PID 5 is removed from Queue 1 at 797
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 797
+Process with PID 4 added to Queue 1 at 798
+Process with PID 7 added to Queue 1 at 798
+Process with PID 8 added to Queue 1 at 798
+Process with PID 4 is removed from Queue 1 at 798
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 798
+Process with PID 7 is removed from Queue 1 at 798
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 798
+Process with PID 8 is removed from Queue 1 at 798
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 798
+Process with PID 6 is removed from Queue 2 at 798
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 798
+Process with PID 4 added to Queue 1 at 799
+Process with PID 5 added to Queue 1 at 799
+Process with PID 7 added to Queue 1 at 799
+Process with PID 8 added to Queue 1 at 799
+Process with PID 4 is removed from Queue 1 at 799
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 799
+Process with PID 5 is removed from Queue 1 at 799
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 799
+Process with PID 7 is removed from Queue 1 at 799
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 799
+Process with PID 8 is removed from Queue 1 at 799
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 799
+Process with PID 4 added to Queue 1 at 800
+Process with PID 5 added to Queue 1 at 800
+Process with PID 6 added to Queue 2 at 800
+Process with PID 7 added to Queue 1 at 800
+Process with PID 4 is removed from Queue 1 at 800
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 800
+Process with PID 5 is removed from Queue 1 at 800
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 800
+Process with PID 7 is removed from Queue 1 at 800
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 800
+Process with PID 4 added to Queue 1 at 801
+Process with PID 5 added to Queue 1 at 801
+Process with PID 8 added to Queue 1 at 801
+Process with PID 4 is removed from Queue 1 at 801
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 801
+Process with PID 5 is removed from Queue 1 at 801
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 801
+Process with PID 8 is removed from Queue 1 at 801
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 801
+Process with PID 6 is removed from Queue 2 at 801
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 801
+Process with PID 4 added to Queue 1 at 802
+Process with PID 5 added to Queue 1 at 802
+Process with PID 7 added to Queue 1 at 802
+Process with PID 8 added to Queue 1 at 802
+Process with PID 4 is removed from Queue 1 at 802
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 802
+Process with PID 5 is removed from Queue 1 at 802
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 802
+Process with PID 7 is removed from Queue 1 at 802
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 802
+Process with PID 4 added to Queue 1 at 803
+Process with PID 5 added to Queue 1 at 803
+Process with PID 6 added to Queue 2 at 803
+Process with PID 8 is removed from Queue 1 at 803
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 803
+Process with PID 4 is removed from Queue 1 at 803
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 803
+Process with PID 5 is removed from Queue 1 at 803
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 803
+Process with PID 6 is removed from Queue 2 at 803
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 803
+Process with PID 4 added to Queue 1 at 804
+Process with PID 5 added to Queue 1 at 804
+Process with PID 7 added to Queue 1 at 804
+Process with PID 8 added to Queue 1 at 804
+Process with PID 4 is removed from Queue 1 at 804
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 804
+Process with PID 5 is removed from Queue 1 at 804
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 804
+Process with PID 7 is removed from Queue 1 at 804
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 804
+Process with PID 4 added to Queue 1 at 805
+Process with PID 5 added to Queue 1 at 805
+Process with PID 6 added to Queue 2 at 805
+Process with PID 8 is removed from Queue 1 at 805
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 805
+Process with PID 4 is removed from Queue 1 at 805
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 805
+Process with PID 5 is removed from Queue 1 at 805
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 805
+Process with PID 6 is removed from Queue 2 at 805
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 805
+Process with PID 4 added to Queue 1 at 806
+Process with PID 5 added to Queue 1 at 806
+Process with PID 7 added to Queue 1 at 806
+Process with PID 8 added to Queue 1 at 806
+Process with PID 4 is removed from Queue 1 at 806
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 806
+Process with PID 5 is removed from Queue 1 at 806
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 806
+Process with PID 7 is removed from Queue 1 at 806
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 806
+Process with PID 8 is removed from Queue 1 at 806
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 806
+Process with PID 4 added to Queue 1 at 807
+Process with PID 5 added to Queue 1 at 807
+Process with PID 6 added to Queue 2 at 807
+Process with PID 7 added to Queue 1 at 807
+Process with PID 4 is removed from Queue 1 at 807
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 807
+Process with PID 5 is removed from Queue 1 at 807
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 807
+Process with PID 4 added to Queue 1 at 808
+Process with PID 8 added to Queue 1 at 808
+Process with PID 7 is removed from Queue 1 at 808
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 808
+Process with PID 4 is removed from Queue 1 at 808
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 808
+Process with PID 8 is removed from Queue 1 at 808
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 808
+Process with PID 6 is removed from Queue 2 at 808
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 808
+Process with PID 4 added to Queue 1 at 809
+Process with PID 5 added to Queue 1 at 809
+Process with PID 7 added to Queue 1 at 809
+Process with PID 8 added to Queue 1 at 809
+Process with PID 4 is removed from Queue 1 at 809
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 809
+Process with PID 5 is removed from Queue 1 at 809
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 809
+Process with PID 7 is removed from Queue 1 at 809
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 809
+Process with PID 4 added to Queue 1 at 810
+Process with PID 5 added to Queue 1 at 810
+Process with PID 6 added to Queue 2 at 810
+Process with PID 8 is removed from Queue 1 at 810
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 810
+Process with PID 4 is removed from Queue 1 at 810
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 810
+Process with PID 5 is removed from Queue 1 at 810
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 810
+Process with PID 6 is removed from Queue 2 at 810
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 810
+Process with PID 4 added to Queue 1 at 811
+Process with PID 5 added to Queue 1 at 811
+Process with PID 7 added to Queue 1 at 811
+Process with PID 8 added to Queue 1 at 811
+Process with PID 4 is removed from Queue 1 at 811
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 811
+Process with PID 5 is removed from Queue 1 at 811
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 811
+Process with PID 7 is removed from Queue 1 at 811
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 811
+Process with PID 4 added to Queue 1 at 812
+Process with PID 5 added to Queue 1 at 812
+Process with PID 6 added to Queue 2 at 812
+Process with PID 8 is removed from Queue 1 at 812
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 812
+Process with PID 4 is removed from Queue 1 at 812
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 812
+Process with PID 5 is removed from Queue 1 at 812
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 812
+Process with PID 6 is removed from Queue 2 at 812
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 812
+Process with PID 4 added to Queue 1 at 813
+Process with PID 5 added to Queue 1 at 813
+Process with PID 7 added to Queue 1 at 813
+Process with PID 8 added to Queue 1 at 813
+Process with PID 4 is removed from Queue 1 at 813
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 813
+Process with PID 5 is removed from Queue 1 at 813
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 813
+Process with PID 7 is removed from Queue 1 at 813
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 813
+Process with PID 4 added to Queue 1 at 814
+Process with PID 5 added to Queue 1 at 814
+Process with PID 6 added to Queue 2 at 814
+Process with PID 8 is removed from Queue 1 at 814
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 814
+Process with PID 4 is removed from Queue 1 at 814
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 814
+Process with PID 5 is removed from Queue 1 at 814
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 814
+Process with PID 6 is removed from Queue 2 at 814
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 814
+Process with PID 4 added to Queue 1 at 815
+Process with PID 5 added to Queue 1 at 815
+Process with PID 7 added to Queue 1 at 815
+Process with PID 8 added to Queue 1 at 815
+Process with PID 4 is removed from Queue 1 at 815
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 815
+Process with PID 5 is removed from Queue 1 at 815
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 815
+Process with PID 7 is removed from Queue 1 at 815
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 815
+Process with PID 4 added to Queue 1 at 816
+Process with PID 5 added to Queue 1 at 816
+Process with PID 6 added to Queue 2 at 816
+Process with PID 8 is removed from Queue 1 at 816
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 816
+Process with PID 4 is removed from Queue 1 at 816
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 816
+Process with PID 5 is removed from Queue 1 at 816
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 816
+Process with PID 4 added to Queue 1 at 817
+Process with PID 7 added to Queue 1 at 817
+Process with PID 8 added to Queue 1 at 817
+Process with PID 4 is removed from Queue 1 at 817
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 817
+Process with PID 7 is removed from Queue 1 at 817
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 817
+Process with PID 8 is removed from Queue 1 at 817
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 817
+Process with PID 4 added to Queue 1 at 818
+Process with PID 5 added to Queue 1 at 818
+Process with PID 7 added to Queue 1 at 818
+Process with PID 4 is removed from Queue 1 at 818
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 818
+Process with PID 5 is removed from Queue 1 at 818
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 818
+Process with PID 7 is removed from Queue 1 at 818
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 818
+Process with PID 6 is removed from Queue 2 at 818
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 818
+Process with PID 4 added to Queue 1 at 819
+Process with PID 5 added to Queue 1 at 819
+Process with PID 7 added to Queue 1 at 819
+Process with PID 8 added to Queue 1 at 819
+Process with PID 4 is removed from Queue 1 at 819
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 819
+Process with PID 5 is removed from Queue 1 at 819
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 819
+Process with PID 4 added to Queue 1 at 820
+Process with PID 6 added to Queue 2 at 820
+Process with PID 7 is removed from Queue 1 at 820
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 820
+Process with PID 8 is removed from Queue 1 at 820
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 820
+Process with PID 4 is removed from Queue 1 at 820
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 820
+Process with PID 6 is removed from Queue 2 at 820
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 820
+Process with PID 4 added to Queue 1 at 821
+Process with PID 5 added to Queue 1 at 821
+Process with PID 7 added to Queue 1 at 821
+Process with PID 8 added to Queue 1 at 821
+Process with PID 4 is removed from Queue 1 at 821
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 821
+Process with PID 5 is removed from Queue 1 at 821
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 821
+Process with PID 7 is removed from Queue 1 at 821
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 821
+Process with PID 4 added to Queue 1 at 822
+Process with PID 5 added to Queue 1 at 822
+Process with PID 6 added to Queue 2 at 822
+Process with PID 8 is removed from Queue 1 at 822
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 822
+Process with PID 4 is removed from Queue 1 at 822
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 822
+Process with PID 5 is removed from Queue 1 at 822
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 822
+Process with PID 4 added to Queue 1 at 823
+Process with PID 7 added to Queue 1 at 823
+Process with PID 8 added to Queue 1 at 823
+Process with PID 4 is removed from Queue 1 at 823
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 823
+Process with PID 7 is removed from Queue 1 at 823
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 823
+Process with PID 8 is removed from Queue 1 at 823
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 823
+Process with PID 6 is removed from Queue 2 at 823
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 823
+Process with PID 4 added to Queue 1 at 824
+Process with PID 5 added to Queue 1 at 824
+Process with PID 7 added to Queue 1 at 824
+Process with PID 8 added to Queue 1 at 824
+Process with PID 4 is removed from Queue 1 at 824
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 824
+Process with PID 5 is removed from Queue 1 at 824
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 824
+Process with PID 7 is removed from Queue 1 at 824
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 824
+Process with PID 4 added to Queue 1 at 825
+Process with PID 5 added to Queue 1 at 825
+Process with PID 6 added to Queue 2 at 825
+Process with PID 8 is removed from Queue 1 at 825
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 825
+Process with PID 4 is removed from Queue 1 at 825
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 825
+Process with PID 5 is removed from Queue 1 at 825
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 825
+Process with PID 6 is removed from Queue 2 at 825
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 825
+Process with PID 4 added to Queue 1 at 826
+Process with PID 5 added to Queue 1 at 826
+Process with PID 7 added to Queue 1 at 826
+Process with PID 8 added to Queue 1 at 826
+Process with PID 4 is removed from Queue 1 at 826
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 826
+Process with PID 5 is removed from Queue 1 at 826
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 826
+Process with PID 7 is removed from Queue 1 at 826
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 826
+Process with PID 4 added to Queue 1 at 827
+Process with PID 5 added to Queue 1 at 827
+Process with PID 6 added to Queue 2 at 827
+Process with PID 8 is removed from Queue 1 at 827
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 827
+Process with PID 4 is removed from Queue 1 at 827
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 827
+Process with PID 5 is removed from Queue 1 at 827
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 827
+Process with PID 6 is removed from Queue 2 at 827
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 827
+Process with PID 4 added to Queue 1 at 828
+Process with PID 5 added to Queue 1 at 828
+Process with PID 7 added to Queue 1 at 828
+Process with PID 8 added to Queue 1 at 828
+Process with PID 4 is removed from Queue 1 at 828
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 828
+Process with PID 5 is removed from Queue 1 at 828
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 828
+Process with PID 4 added to Queue 1 at 829
+Process with PID 6 added to Queue 2 at 829
+Process with PID 7 is removed from Queue 1 at 829
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 829
+Process with PID 8 is removed from Queue 1 at 829
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 829
+Process with PID 5 added to Queue 1 at 830
+Process with PID 7 added to Queue 1 at 830
+Process with PID 4 is removed from Queue 1 at 830
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 830
+Process with PID 8 added to Queue 1 at 831
+Process with PID 5 is removed from Queue 1 at 831
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 831
+Process with PID 7 is removed from Queue 1 at 831
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 831
+Process with PID 4 added to Queue 1 at 832
+Process with PID 5 added to Queue 1 at 832
+Process with PID 8 is removed from Queue 1 at 832
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 832
+Process with PID 7 added to Queue 1 at 833
+Process with PID 4 is removed from Queue 1 at 833
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 833
+Process with PID 5 is removed from Queue 1 at 833
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 833
+Process with PID 7 is removed from Queue 1 at 833
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 833
+Process with PID 4 added to Queue 1 at 834
+Process with PID 5 added to Queue 1 at 834
+Process with PID 8 added to Queue 1 at 834
+Process with PID 4 is removed from Queue 1 at 834
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 834
+Process with PID 5 is removed from Queue 1 at 834
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 834
+Process with PID 8 is removed from Queue 1 at 834
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 834
+Process with PID 4 added to Queue 1 at 835
+Process with PID 5 added to Queue 1 at 835
+Process with PID 7 added to Queue 1 at 835
+Process with PID 4 is removed from Queue 1 at 835
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 835
+Process with PID 5 is removed from Queue 1 at 835
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 835
+Process with PID 4 added to Queue 1 at 836
+Process with PID 8 added to Queue 1 at 836
+Process with PID 7 is removed from Queue 1 at 836
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 836
+Process with PID 4 is removed from Queue 1 at 836
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 836
+Process with PID 8 is removed from Queue 1 at 836
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 836
+Process with PID 6 is removed from Queue 2 at 836
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 836
+Process with PID 4 added to Queue 1 at 837
+Process with PID 5 added to Queue 1 at 837
+Process with PID 6 added to Queue 2 at 837
+Process with PID 7 added to Queue 1 at 837
+Process with PID 8 added to Queue 1 at 837
+Process with PID 4 is removed from Queue 1 at 837
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 837
+Process with PID 5 is removed from Queue 1 at 837
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 837
+Process with PID 7 is removed from Queue 1 at 837
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 837
+Process with PID 4 added to Queue 1 at 838
+Process with PID 5 added to Queue 1 at 838
+Process with PID 8 is removed from Queue 1 at 838
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 838
+Process with PID 4 is removed from Queue 1 at 838
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 838
+Process with PID 5 is removed from Queue 1 at 838
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 838
+Process with PID 6 is removed from Queue 2 at 838
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 838
+Process with PID 4 added to Queue 1 at 839
+Process with PID 5 added to Queue 1 at 839
+Process with PID 7 added to Queue 1 at 839
+Process with PID 8 added to Queue 1 at 839
+Process with PID 4 is removed from Queue 1 at 839
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 839
+Process with PID 5 is removed from Queue 1 at 839
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 839
+Process with PID 7 is removed from Queue 1 at 839
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 839
+Process with PID 4 added to Queue 1 at 840
+Process with PID 5 added to Queue 1 at 840
+Process with PID 6 added to Queue 2 at 840
+Process with PID 8 is removed from Queue 1 at 840
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 840
+Process with PID 4 is removed from Queue 1 at 840
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 840
+Process with PID 5 is removed from Queue 1 at 840
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 840
+Process with PID 4 added to Queue 1 at 841
+Process with PID 7 added to Queue 1 at 841
+Process with PID 8 added to Queue 1 at 841
+Process with PID 4 is removed from Queue 1 at 841
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 841
+Process with PID 5 added to Queue 1 at 842
+Process with PID 7 is removed from Queue 1 at 842
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 842
+Process with PID 8 is removed from Queue 1 at 842
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 842
+Process with PID 4 added to Queue 1 at 843
+Process with PID 7 added to Queue 1 at 843
+Process with PID 5 is removed from Queue 1 at 843
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 843
+Process with PID 4 is removed from Queue 1 at 843
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 843
+Process with PID 5 added to Queue 1 at 844
+Process with PID 8 added to Queue 1 at 844
+Process with PID 7 is removed from Queue 1 at 844
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 844
+Process with PID 5 is removed from Queue 1 at 844
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 844
+Process with PID 8 is removed from Queue 1 at 844
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 844
+Process with PID 4 added to Queue 1 at 845
+Process with PID 5 added to Queue 1 at 845
+Process with PID 7 added to Queue 1 at 845
+Process with PID 4 is removed from Queue 1 at 845
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 845
+Process with PID 8 added to Queue 1 at 846
+Process with PID 5 is removed from Queue 1 at 846
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 846
+Process with PID 7 is removed from Queue 1 at 846
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 846
+Process with PID 4 added to Queue 1 at 847
+Process with PID 5 added to Queue 1 at 847
+Process with PID 8 is removed from Queue 1 at 847
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 847
+Process with PID 7 added to Queue 1 at 848
+Process with PID 4 is removed from Queue 1 at 848
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 848
+Process with PID 5 is removed from Queue 1 at 848
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 848
+Process with PID 4 added to Queue 1 at 849
+Process with PID 8 added to Queue 1 at 849
+Process with PID 7 is removed from Queue 1 at 849
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 849
+Process with PID 4 is removed from Queue 1 at 849
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 849
+Process with PID 5 added to Queue 1 at 850
+Process with PID 7 added to Queue 1 at 850
+Process with PID 8 is removed from Queue 1 at 850
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 850
+Process with PID 4 added to Queue 1 at 851
+Process with PID 5 is removed from Queue 1 at 851
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 851
+Process with PID 7 is removed from Queue 1 at 851
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 851
+Process with PID 5 added to Queue 1 at 852
+Process with PID 8 added to Queue 1 at 852
+Process with PID 4 is removed from Queue 1 at 852
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 852
+Process with PID 5 is removed from Queue 1 at 852
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 852
+Process with PID 4 added to Queue 1 at 853
+Process with PID 7 added to Queue 1 at 853
+Process with PID 8 is removed from Queue 1 at 853
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 853
+Process with PID 5 added to Queue 1 at 854
+Process with PID 4 is removed from Queue 1 at 854
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 854
+Process with PID 7 is removed from Queue 1 at 854
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 854
+Process with PID 4 added to Queue 1 at 855
+Process with PID 8 added to Queue 1 at 855
+Process with PID 5 is removed from Queue 1 at 855
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 855
+Process with PID 4 is removed from Queue 1 at 855
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 855
+Process with PID 5 added to Queue 1 at 856
+Process with PID 7 added to Queue 1 at 856
+Process with PID 8 is removed from Queue 1 at 856
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 856
+Process with PID 5 is removed from Queue 1 at 856
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 856
+Process with PID 7 is removed from Queue 1 at 856
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 856
+Process with PID 6 is removed from Queue 2 at 856
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 856
+Process with PID 4 added to Queue 1 at 857
+Process with PID 5 added to Queue 1 at 857
+Process with PID 6 added to Queue 2 at 857
+Process with PID 7 added to Queue 1 at 857
+Process with PID 8 added to Queue 1 at 857
+Process with PID 4 is removed from Queue 1 at 857
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 857
+Process with PID 5 is removed from Queue 1 at 857
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 857
+Process with PID 4 added to Queue 1 at 858
+Process with PID 7 is removed from Queue 1 at 858
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 858
+Process with PID 8 is removed from Queue 1 at 858
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 858
+Process with PID 4 is removed from Queue 1 at 858
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 858
+Process with PID 6 is removed from Queue 2 at 858
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 858
+Process with PID 4 added to Queue 1 at 859
+Process with PID 5 added to Queue 1 at 859
+Process with PID 7 added to Queue 1 at 859
+Process with PID 8 added to Queue 1 at 859
+Process with PID 4 is removed from Queue 1 at 859
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 859
+Process with PID 5 is removed from Queue 1 at 859
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 859
+Process with PID 7 is removed from Queue 1 at 859
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 859
+Process with PID 4 added to Queue 1 at 860
+Process with PID 5 added to Queue 1 at 860
+Process with PID 6 added to Queue 2 at 860
+Process with PID 8 is removed from Queue 1 at 860
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 860
+Process with PID 4 is removed from Queue 1 at 860
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 860
+Process with PID 5 is removed from Queue 1 at 860
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 860
+Process with PID 6 is removed from Queue 2 at 860
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 860
+Process with PID 4 added to Queue 1 at 861
+Process with PID 5 added to Queue 1 at 861
+Process with PID 7 added to Queue 1 at 861
+Process with PID 8 added to Queue 1 at 861
+Process with PID 4 is removed from Queue 1 at 861
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 861
+Process with PID 5 is removed from Queue 1 at 861
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 861
+Process with PID 7 is removed from Queue 1 at 861
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 861
+Process with PID 4 added to Queue 1 at 862
+Process with PID 5 added to Queue 1 at 862
+Process with PID 6 added to Queue 2 at 862
+Process with PID 8 is removed from Queue 1 at 862
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 862
+Process with PID 4 is removed from Queue 1 at 862
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 862
+Process with PID 5 is removed from Queue 1 at 862
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 862
+Process with PID 4 added to Queue 1 at 863
+Process with PID 7 added to Queue 1 at 863
+Process with PID 8 added to Queue 1 at 863
+Process with PID 4 is removed from Queue 1 at 863
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 863
+Process with PID 7 is removed from Queue 1 at 863
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 863
+Process with PID 8 is removed from Queue 1 at 863
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 863
+Process with PID 6 is removed from Queue 2 at 863
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 863
+Process with PID 4 added to Queue 1 at 864
+Process with PID 5 added to Queue 1 at 864
+Process with PID 7 added to Queue 1 at 864
+Process with PID 8 added to Queue 1 at 864
+Process with PID 4 is removed from Queue 1 at 864
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 864
+Process with PID 5 is removed from Queue 1 at 864
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 864
+Process with PID 7 is removed from Queue 1 at 864
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 864
+Process with PID 4 added to Queue 1 at 865
+Process with PID 5 added to Queue 1 at 865
+Process with PID 6 added to Queue 2 at 865
+Process with PID 8 is removed from Queue 1 at 865
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 865
+Process with PID 4 is removed from Queue 1 at 865
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 865
+Process with PID 5 is removed from Queue 1 at 865
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 865
+Process with PID 4 added to Queue 1 at 866
+Process with PID 7 added to Queue 1 at 866
+Process with PID 8 added to Queue 1 at 866
+Process with PID 4 is removed from Queue 1 at 866
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 866
+Process with PID 7 is removed from Queue 1 at 866
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 866
+Process with PID 8 is removed from Queue 1 at 866
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 866
+Process with PID 6 is removed from Queue 2 at 866
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 866
+Process with PID 4 added to Queue 1 at 867
+Process with PID 5 added to Queue 1 at 867
+Process with PID 7 added to Queue 1 at 867
+Process with PID 8 added to Queue 1 at 867
+Process with PID 4 is removed from Queue 1 at 867
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 867
+Process with PID 5 is removed from Queue 1 at 867
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 867
+Process with PID 7 is removed from Queue 1 at 867
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 867
+Process with PID 4 added to Queue 1 at 868
+Process with PID 5 added to Queue 1 at 868
+Process with PID 6 added to Queue 2 at 868
+Process with PID 8 is removed from Queue 1 at 868
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 868
+Process with PID 4 is removed from Queue 1 at 868
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 868
+Process with PID 7 added to Queue 1 at 869
+Process with PID 8 added to Queue 1 at 869
+Process with PID 5 is removed from Queue 1 at 869
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 869
+Process with PID 7 is removed from Queue 1 at 869
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 869
+Process with PID 8 is removed from Queue 1 at 869
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 869
+Process with PID 6 is removed from Queue 2 at 869
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 869
+Process with PID 4 added to Queue 1 at 870
+Process with PID 5 added to Queue 1 at 870
+Process with PID 7 added to Queue 1 at 870
+Process with PID 8 added to Queue 1 at 870
+Process with PID 4 is removed from Queue 1 at 870
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 870
+Process with PID 5 is removed from Queue 1 at 870
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 870
+Process with PID 4 added to Queue 1 at 871
+Process with PID 6 added to Queue 2 at 871
+Process with PID 7 is removed from Queue 1 at 871
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 871
+Process with PID 8 is removed from Queue 1 at 871
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 871
+Process with PID 4 is removed from Queue 1 at 871
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 871
+Process with PID 5 added to Queue 1 at 872
+Process with PID 7 added to Queue 1 at 872
+Process with PID 8 added to Queue 1 at 872
+Process with PID 5 is removed from Queue 1 at 872
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 872
+Process with PID 7 is removed from Queue 1 at 872
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 872
+Process with PID 8 is removed from Queue 1 at 872
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 872
+Process with PID 6 is removed from Queue 2 at 872
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 872
+Process with PID 4 added to Queue 1 at 873
+Process with PID 5 added to Queue 1 at 873
+Process with PID 7 added to Queue 1 at 873
+Process with PID 8 added to Queue 1 at 873
+Process with PID 4 is removed from Queue 1 at 873
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 873
+Process with PID 5 is removed from Queue 1 at 873
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 873
+Process with PID 7 is removed from Queue 1 at 873
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 873
+Process with PID 4 added to Queue 1 at 874
+Process with PID 5 added to Queue 1 at 874
+Process with PID 6 added to Queue 2 at 874
+Process with PID 8 is removed from Queue 1 at 874
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 874
+Process with PID 4 is removed from Queue 1 at 874
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 874
+Process with PID 5 is removed from Queue 1 at 874
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 874
+Process with PID 6 is removed from Queue 2 at 874
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 874
+Process with PID 4 added to Queue 1 at 875
+Process with PID 5 added to Queue 1 at 875
+Process with PID 7 added to Queue 1 at 875
+Process with PID 8 added to Queue 1 at 875
+Process with PID 4 is removed from Queue 1 at 875
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 875
+Process with PID 5 is removed from Queue 1 at 875
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 875
+Process with PID 7 is removed from Queue 1 at 875
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 875
+Process with PID 4 added to Queue 1 at 876
+Process with PID 5 added to Queue 1 at 876
+Process with PID 6 added to Queue 2 at 876
+Process with PID 8 is removed from Queue 1 at 876
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 876
+Process with PID 4 is removed from Queue 1 at 876
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 876
+Process with PID 5 is removed from Queue 1 at 876
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 876
+Process with PID 4 added to Queue 1 at 877
+Process with PID 7 added to Queue 1 at 877
+Process with PID 8 added to Queue 1 at 877
+Process with PID 4 is removed from Queue 1 at 877
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 877
+Process with PID 7 is removed from Queue 1 at 877
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 877
+Process with PID 8 is removed from Queue 1 at 877
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 877
+Process with PID 4 added to Queue 1 at 878
+Process with PID 5 added to Queue 1 at 878
+Process with PID 7 added to Queue 1 at 878
+Process with PID 4 is removed from Queue 1 at 878
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 878
+Process with PID 5 is removed from Queue 1 at 878
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 878
+Process with PID 7 is removed from Queue 1 at 878
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 878
+Process with PID 6 is removed from Queue 2 at 878
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 878
+Process with PID 4 added to Queue 1 at 879
+Process with PID 5 added to Queue 1 at 879
+Process with PID 7 added to Queue 1 at 879
+Process with PID 8 added to Queue 1 at 879
+Process with PID 4 is removed from Queue 1 at 879
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 879
+Process with PID 5 is removed from Queue 1 at 879
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 879
+Process with PID 4 added to Queue 1 at 880
+Process with PID 6 added to Queue 2 at 880
+Process with PID 7 is removed from Queue 1 at 880
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 880
+Process with PID 8 is removed from Queue 1 at 880
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 880
+Process with PID 4 is removed from Queue 1 at 880
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 880
+Process with PID 6 is removed from Queue 2 at 880
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 880
+Process with PID 4 added to Queue 1 at 881
+Process with PID 5 added to Queue 1 at 881
+Process with PID 7 added to Queue 1 at 881
+Process with PID 8 added to Queue 1 at 881
+Process with PID 4 is removed from Queue 1 at 881
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 881
+Process with PID 5 is removed from Queue 1 at 881
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 881
+Process with PID 7 is removed from Queue 1 at 881
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 881
+Process with PID 4 added to Queue 1 at 882
+Process with PID 5 added to Queue 1 at 882
+Process with PID 6 added to Queue 2 at 882
+Process with PID 8 is removed from Queue 1 at 882
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 882
+Process with PID 4 is removed from Queue 1 at 882
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 882
+Process with PID 5 is removed from Queue 1 at 882
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 882
+Process with PID 4 added to Queue 1 at 883
+Process with PID 7 added to Queue 1 at 883
+Process with PID 8 added to Queue 1 at 883
+Process with PID 4 is removed from Queue 1 at 883
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 883
+Process with PID 5 added to Queue 1 at 884
+Process with PID 7 is removed from Queue 1 at 884
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 884
+Process with PID 8 is removed from Queue 1 at 884
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 884
+Process with PID 4 added to Queue 1 at 885
+Process with PID 7 added to Queue 1 at 885
+Process with PID 5 is removed from Queue 1 at 885
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 885
+Process with PID 8 added to Queue 1 at 886
+Process with PID 4 is removed from Queue 1 at 886
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 886
+Process with PID 7 is removed from Queue 1 at 886
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 886
+Process with PID 4 added to Queue 1 at 887
+Process with PID 5 added to Queue 1 at 887
+Process with PID 7 added to Queue 1 at 887
+Process with PID 8 is removed from Queue 1 at 887
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 887
+Process with PID 4 is removed from Queue 1 at 887
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 887
+Process with PID 5 is removed from Queue 1 at 887
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 887
+Process with PID 7 is removed from Queue 1 at 887
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 887
+Process with PID 6 is removed from Queue 2 at 887
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 887
+Process with PID 4 added to Queue 1 at 888
+Process with PID 5 added to Queue 1 at 888
+Process with PID 6 added to Queue 2 at 888
+Process with PID 7 added to Queue 1 at 888
+Process with PID 8 added to Queue 1 at 888
+Process with PID 4 is removed from Queue 1 at 889
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 889
+Process with PID 5 is removed from Queue 1 at 889
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 889
+Process with PID 7 is removed from Queue 1 at 889
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 889
+Process with PID 4 added to Queue 1 at 890
+Process with PID 5 added to Queue 1 at 890
+Process with PID 8 is removed from Queue 1 at 890
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 890
+Process with PID 7 added to Queue 1 at 891
+Process with PID 4 is removed from Queue 1 at 891
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 891
+Process with PID 5 is removed from Queue 1 at 891
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 891
+Process with PID 4 added to Queue 1 at 892
+Process with PID 8 added to Queue 1 at 892
+Process with PID 7 is removed from Queue 1 at 892
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 892
+Process with PID 5 added to Queue 1 at 893
+Process with PID 4 is removed from Queue 1 at 893
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 893
+Process with PID 8 is removed from Queue 1 at 893
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 893
+Process with PID 4 added to Queue 1 at 894
+Process with PID 7 added to Queue 1 at 894
+Process with PID 5 is removed from Queue 1 at 894
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 894
+Process with PID 4 is removed from Queue 1 at 894
+Scheduling tester_mlfq with PID 4 from Queue 1 with current tick 1 at tick 894
+Process with PID 5 added to Queue 1 at 895
+Process with PID 8 added to Queue 1 at 895
+Process with PID 4 added to Queue 2 at 896
+Process with PID 7 is removed from Queue 1 at 896
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 896
+Process with PID 5 is removed from Queue 1 at 896
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 896
+Process with PID 8 is removed from Queue 1 at 896
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 896
+Process with PID 6 is removed from Queue 2 at 896
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 896
+Process with PID 5 added to Queue 1 at 897
+Process with PID 7 added to Queue 1 at 897
+Process with PID 8 added to Queue 1 at 897
+Process with PID 5 is removed from Queue 1 at 897
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 897
+Process with PID 6 added to Queue 2 at 898
+Process with PID 7 is removed from Queue 1 at 898
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 898
+Process with PID 8 is removed from Queue 1 at 898
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 898
+Process with PID 5 added to Queue 1 at 899
+Process with PID 7 added to Queue 1 at 899
+Process with PID 5 is removed from Queue 1 at 899
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 899
+Process with PID 7 is removed from Queue 1 at 899
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 899
+Process with PID 5 added to Queue 1 at 900
+Process with PID 8 added to Queue 1 at 900
+Process with PID 5 is removed from Queue 1 at 900
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 900
+Process with PID 7 added to Queue 1 at 901
+Process with PID 8 is removed from Queue 1 at 901
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 901
+Process with PID 7 is removed from Queue 1 at 901
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 901
+Process with PID 4 is removed from Queue 2 at 901
+Scheduling tester_mlfq with PID 4 from Queue 2 with current tick 1 at tick 901
+Process with PID 5 added to Queue 1 at 902
+Process with PID 7 added to Queue 1 at 902
+Process with PID 8 added to Queue 1 at 902
+Process with PID 4 added to Queue 3 at 905
+Process with PID 5 is removed from Queue 1 at 905
+Scheduling tester_mlfq with PID 5 from Queue 1 with current tick 1 at tick 905
+Process with PID 5 added to Queue 2 at 907
+Process with PID 7 is removed from Queue 1 at 907
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 907
+Process with PID 8 is removed from Queue 1 at 907
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 907
+Process with PID 6 is removed from Queue 2 at 907
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 907
+Process with PID 5 is removed from Queue 2 at 907
+Scheduling tester_mlfq with PID 5 from Queue 2 with current tick 1 at tick 907
+Process with PID 6 added to Queue 2 at 908
+Process with PID 7 added to Queue 1 at 908
+Process with PID 8 added to Queue 1 at 908
+Process with PID 5 added to Queue 3 at 911
+Process with PID 7 is removed from Queue 1 at 911
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 911
+Process with PID 8 is removed from Queue 1 at 911
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 911
+Process with PID 7 added to Queue 1 at 912
+Process with PID 7 is removed from Queue 1 at 912
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 912
+Process with PID 6 is removed from Queue 2 at 912
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 912
+Process with PID 7 added to Queue 1 at 913
+Process with PID 8 added to Queue 1 at 913
+Process with PID 7 is removed from Queue 1 at 913
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 913
+Process with PID 8 is removed from Queue 1 at 913
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 913
+Process with PID 4 is removed from Queue 3 at 913
+Scheduling tester_mlfq with PID 4 from Queue 3 with current tick 1 at tick 913
+Process with PID 6 added to Queue 2 at 914
+Process with PID 7 added to Queue 1 at 914
+Process with PID 8 added to Queue 1 at 914
+Process with PID 4 added to Queue 4 at 921
+Process with PID 7 is removed from Queue 1 at 921
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 921
+Process with PID 8 is removed from Queue 1 at 921
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 921
+Process with PID 6 is removed from Queue 2 at 921
+Scheduling tester_mlfq with PID 6 from Queue 2 with current tick 1 at tick 921
+Process with PID 7 added to Queue 1 at 922
+Process with PID 8 added to Queue 1 at 922
+Process with PID 6 added to Queue 3 at 925
+Process with PID 7 is removed from Queue 1 at 925
+Scheduling tester_mlfq with PID 7 from Queue 1 with current tick 1 at tick 925
+Process with PID 7 added to Queue 2 at 927
+Process with PID 8 is removed from Queue 1 at 927
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 927
+Process with PID 7 is removed from Queue 2 at 927
+Scheduling tester_mlfq with PID 7 from Queue 2 with current tick 1 at tick 927
+Process with PID 8 added to Queue 1 at 928
+Process with PID 7 added to Queue 3 at 931
+Process with PID 8 is removed from Queue 1 at 931
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 931
+Process with PID 5 is removed from Queue 3 at 931
+Scheduling tester_mlfq with PID 5 from Queue 3 with current tick 1 at tick 931
+Process with PID 8 added to Queue 1 at 932
+Process with PID 5 added to Queue 4 at 939
+Process with PID 8 is removed from Queue 1 at 939
+Scheduling tester_mlfq with PID 8 from Queue 1 with current tick 1 at tick 939
+Process with PID 8 added to Queue 2 at 941
+Process with PID 8 is removed from Queue 2 at 941
+Scheduling tester_mlfq with PID 8 from Queue 2 with current tick 1 at tick 941
+Process with PID 8 added to Queue 3 at 945
+Process with PID 6 is removed from Queue 3 at 945
+Scheduling tester_mlfq with PID 6 from Queue 3 with current tick 1 at tick 945
+Process with PID 6 added to Queue 4 at 953
+Process with PID 4 is removed from Queue 4 at 953
+Process 4 moved to queue 3 from 4 due to age 32 at 953
+Process with PID 4 added to Queue 3 at 953
+Process with PID 7 is removed from Queue 3 at 953
+Scheduling tester_mlfq with PID 7 from Queue 3 with current tick 1 at tick 953
+Process with PID 7 added to Queue 4 at 961
+Process with PID 8 is removed from Queue 3 at 961
+Scheduling tester_mlfq with PID 8 from Queue 3 with current tick 1 at tick 961
+Process with PID 8 added to Queue 4 at 969
+Process with PID 4 is removed from Queue 3 at 969
+Scheduling tester_mlfq with PID 4 from Queue 3 with current tick 1 at tick 969
+Process with PID 4 added to Queue 4 at 977
+Process with PID 5 is removed from Queue 4 at 977
+Process 5 moved to queue 3 from 4 due to age 38 at 977
+Process with PID 5 added to Queue 3 at 977
+Process with PID 5 is removed from Queue 3 at 977
+Scheduling tester_mlfq with PID 5 from Queue 3 with current tick 1 at tick 977
+Process with PID 5 added to Queue 4 at 985
+Process with PID 6 is removed from Queue 4 at 985
+Process 6 moved to queue 3 from 4 due to age 32 at 985
+Process with PID 6 added to Queue 3 at 985
+Process with PID 6 is removed from Queue 3 at 985
+Scheduling tester_mlfq with PID 6 from Queue 3 with current tick 1 at tick 985
+Process with PID 6 added to Queue 4 at 993
+Process with PID 7 is removed from Queue 4 at 993
+Process 7 moved to queue 3 from 4 due to age 32 at 993
+Process with PID 7 added to Queue 3 at 993
+Process with PID 7 is removed from Queue 3 at 993
+Scheduling tester_mlfq with PID 7 from Queue 3 with current tick 1 at tick 993
+Process with PID 7 added to Queue 4 at 1001
+Process with PID 8 is removed from Queue 4 at 1001
+Process 8 moved to queue 3 from 4 due to age 32 at 1001
+Process with PID 8 added to Queue 3 at 1001
+Process with PID 8 is removed from Queue 3 at 1001
+Scheduling tester_mlfq with PID 8 from Queue 3 with current tick 1 at tick 1001
+Process with PID 8 added to Queue 4 at 1009
+Process with PID 4 is removed from Queue 4 at 1009
+Process 4 moved to queue 3 from 4 due to age 32 at 1009
+Process with PID 4 added to Queue 3 at 1009
+Process with PID 4 is removed from Queue 3 at 1009
+Scheduling tester_mlfq with PID 4 from Queue 3 with current tick 1 at tick 1009
+Process: PID 4 :0 Finished
+Process with PID 3 added to Queue 2 at 1016
+-> EXIT MSG : Total Time for process [tester_mlfq] with pid [4] is [324]
+Process with PID 5 is removed from Queue 4 at 1016
+Process 5 moved to queue 3 from 4 due to age 31 at 1016
+Process with PID 5 added to Queue 3 at 1016
+Process with PID 3 is removed from Queue 2 at 1016
+Scheduling tester_mlfq with PID 3 from Queue 2 with current tick 1 at tick 1016
+Process with PID 5 is removed from Queue 3 at 1017
+Scheduling tester_mlfq with PID 5 from Queue 3 with current tick 1 at tick 1017
+Process: PID 5 :1 Finished
+Process with PID 3 added to Queue 2 at 1024
+-> EXIT MSG : Total Time for process [tester_mlfq] with pid [5] is [331]
+Process with PID 6 is removed from Queue 4 at 1024
+Process 6 moved to queue 3 from 4 due to age 31 at 1024
+Process with PID 6 added to Queue 3 at 1024
+Process with PID 3 is removed from Queue 2 at 1024
+Scheduling tester_mlfq with PID 3 from Queue 2 with current tick 1 at tick 1024
+Process with PID 6 is removed from Queue 3 at 1025
+Scheduling tester_mlfq with PID 6 from Queue 3 with current tick 1 at tick 1025
+Process with PID 6 added to Queue 4 at 1033
+Process with PID 7 is removed from Queue 4 at 1033
+Process 7 moved to queue 3 from 4 due to age 32 at 1033
+Process with PID 7 added to Queue 3 at 1033
+Process with PID 7 is removed from Queue 3 at 1033
+Scheduling tester_mlfq with PID 7 from Queue 3 with current tick 1 at tick 1033
+Process: PID 7 :3 Finished
+Process with PID 3 added to Queue 2 at 1038
+-> EXIT MSG : Total Time for process [tester_mlfq] with pid [7] is [345]
+Process with PID 3 is removed from Queue 2 at 1038
+Scheduling tester_mlfq with PID 3 from Queue 2 with current tick 1 at tick 1038
+Process with PID 8 is removed from Queue 4 at 1039
+Scheduling tester_mlfq with PID 8 from Queue 4 with current tick 1 at tick 1039
+Process: PID 8 :4 Finished
+Process with PID 3 added to Queue 2 at 1043
+-> EXIT MSG : Total Time for process [tester_mlfq] with pid [8] is [349]
+Process with PID 3 is removed from Queue 2 at 1043
+Scheduling tester_mlfq with PID 3 from Queue 2 with current tick 1 at tick 1043
+Process with PID 6 is removed from Queue 4 at 1043
+Scheduling tester_mlfq with PID 6 from Queue 4 with current tick 1 at tick 1043
+Process: PID 6 :2 Finished
+Process with PID 3 added to Queue 2 at 1045
+-> EXIT MSG : Total Time for process [tester_mlfq] with pid [6] is [352]
+Process with PID 3 is removed from Queue 2 at 1045
+Scheduling tester_mlfq with PID 3 from Queue 2 with current tick 1 at tick 1045
+PID	Priority    State 	r_time	w_time	s_time	n_run	cur_q	 q0	q1	q2	q3	q4	Name
+1 	 60 	   SLEEPING 	 3 	 2 	 1040 	 24 	 1 	 1 	 25 	 0 	 0 	 0	 init
+2 	 60 	   SLEEPING 	 1 	 1 	 1039 	 17 	 1 	 15 	 2 	 0 	 0 	 0	 sh
+3 	 60 	   RUNNING  	 8 	 0 	 347 	 14 	 2 	 1 	 9 	 10 	 0 	 0	 tester_mlfq
+-> EXIT MSG : Total Time for process [tester_mlfq] with pid [3] is [356]
+$ 

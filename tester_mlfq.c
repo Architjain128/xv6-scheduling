@@ -4,7 +4,9 @@
 
 
 int number_of_processes = 5;
-
+int a=0;
+int b=1;
+int c;
 int main(int argc, char *argv[])
 {
   #ifndef MLFQ
@@ -23,7 +25,14 @@ int main(int argc, char *argv[])
     }
     if (pid == 0)
     {
-      sleep(j*200); //io time
+      sleep(j*10+200); //io time
+      for (int i = 0; i < 100000000; i++)
+      {
+        c=a;
+        a=b;
+        b=c;
+      }
+      
       printf(1, "Process: PID %d :%d Finished\n", getpid(),j);
       exit();
     }

@@ -6,7 +6,8 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
-
+// int pizza=10;
+// int burger=3;
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];
@@ -41,7 +42,8 @@ int add_proc_to_q(struct proc *p, int q_no)
 		if(p->pid == queue[q_no][i]->pid)
 			return -1;
 	}
-	// cprintf("Process with PID %d added to Queue %d\n", p->pid, q_no);
+  // if(p->pid<=pizza && p->pid>=burger){
+	// cprintf("Process with PID %d added to Queue %d at %d\n", p->pid, q_no,ticks);}
 	p->enter = ticks;
 	p -> queue = q_no;
 	q_tail[q_no]++;
@@ -70,7 +72,8 @@ int remove_proc_from_q(struct proc *p, int q_no)
 	for(int i = rem; i < q_tail[q_no]; i++)
 	queue[q_no][i] = queue[q_no][i+1]; 
 	q_tail[q_no] -= 1;
-	// cprintf("Process with PID %d is removed from Queue %d\n", p->pid, q_no);
+  //   if(p->pid<=pizza && p->pid>=burger){
+	// cprintf("Process with PID %d is removed from Queue %d at %d\n", p->pid, q_no,ticks);}
 	return 1;
 }
 
@@ -608,7 +611,8 @@ scheduler(void)
 					if(age > 30)
 					{
 						remove_proc_from_q(p, i);
-						// cprintf("Process %d moved to queue %d from %d due to age %d at %d\n", p->pid, i-1,i, age, ticks);
+    // if(p->pid<=pizza && p->pid>=burger){
+		// 				cprintf("Process %d moved to queue %d from %d due to age %d at %d\n", p->pid, i-1,i, age, ticks);}
 						add_proc_to_q(p, i-1);
 					}
 				}
@@ -629,7 +633,8 @@ scheduler(void)
 			{
 				p->curr_ticks++;
 				p->num_run++;
-				// cprintf("Scheduling %s with PID %d from Queue %d with current tick %d\n",p->name, p->pid, p->queue, p->curr_ticks);
+        //   if(p->pid<=pizza && p->pid>=burger){
+				// cprintf("Scheduling %s with PID %d from Queue %d with current tick %d at tick %d\n",p->name, p->pid, p->queue, p->curr_ticks,ticks);}
 				p->qticks[p->queue]++;
 				c->proc = p;
 				switchuvm(p);
